@@ -41,7 +41,7 @@ public class ScoreKeeper : MonoBehaviour {
     
     void OnGUI()
     {
-        //TODO: display score better
+        //TODO: better lookin gui
         GUI.Label(new Rect(0, 0, 100, 25), "Score: " + Score);
         if(gameOver)
         {
@@ -50,7 +50,7 @@ public class ScoreKeeper : MonoBehaviour {
                 message = "You win!\nPress space to play again";
             else
                 message = "You lose!\nPress space to play again";
-            GUI.Label(new Rect(50, 50, 100, 50), message);
+            GUI.Label(new Rect(50, 50, 100, 60), message);
         }
     }
     

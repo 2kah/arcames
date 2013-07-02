@@ -55,16 +55,35 @@ namespace AssemblyCSharp
             }
         }
         
+        public Vector3 EmptySpawnPosition()
+        {
+            for(int i = 0; i < 1000; i++)
+            {
+                //find an empty position that isn't too close to (0,0) which is where the player spawns
+                float x = Random.value < 0.5 ? Random.Range(-6f,-1.5f) : Random.Range(1.5f, 6f);
+                float z = Random.value < 0.5 ? Random.Range(-6f,-1.5f) : Random.Range(1.5f, 6f);
+                Vector3 target = new Vector3(x, 0.5f, z);
+                if(PositionEmpty(target))
+                    return target;
+            }
+            return new Vector3(-2, 0.5f, 0);
+        }
+        
+        private bool PositionEmpty(Vector3 pos)
+        {
+            var checkResult = Physics.OverlapSphere(pos, 1);
+            if(checkResult.Length == 0)
+                return true;
+            return false;
+        }
+        
         public Vector3 EmptyPosition()
         {
             for(int i = 0; i < 1000; i++)
             {
                 Vector3 target = new Vector3(Random.Range(-6f,6f),0.5f,Random.Range(-6f,6f));
-                var checkResult = Physics.OverlapSphere(target, 1);
-                if(checkResult.Length == 0)
-                {
+                if(PositionEmpty(target))
                     return target;
-                }
             }
             //we have tried 1000 locations and none are empty
             return new Vector3(0, 0.5f, 0);

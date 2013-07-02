@@ -18,15 +18,15 @@ public class EntityManager : MonoBehaviour {
 		var blueEntity = bluePrefab;
         for(int i = 0; i < rules.NumRed; i++)
         {
-            Instantiate(redEntity, util.EmptyPosition(), Quaternion.identity);
+            Instantiate(redEntity, util.EmptySpawnPosition(), Quaternion.identity);
         }
 		for(int i = 0; i < rules.NumGreen; i++)
 		{
-			Instantiate(greenEntity, util.EmptyPosition(), Quaternion.identity);
+			Instantiate(greenEntity, util.EmptySpawnPosition(), Quaternion.identity);
 		}
         for(int i = 0; i < rules.NumBlue; i++)
         {
-            Instantiate(blueEntity, util.EmptyPosition(), Quaternion.identity);
+            Instantiate(blueEntity, util.EmptySpawnPosition(), Quaternion.identity);
         }
 	}
 	
