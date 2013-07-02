@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 30d95086c8e7d1849b66c6359460260d
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - redPrefab: {fileID: 400002, guid: 76254d8b8fa91f24f9408efc78bbea4d, type: 2}
+  - greenPrefab: {fileID: 400002, guid: b600b38ab676510449f2a7fa8f20c6df, type: 2}
+  - bluePrefab: {fileID: 400002, guid: 384529d974c8ea14da81b714e7b5e546, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
