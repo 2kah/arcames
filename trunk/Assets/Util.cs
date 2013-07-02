@@ -57,7 +57,7 @@ namespace AssemblyCSharp
         
         public Vector3 EmptyPosition()
         {
-            while(true)
+            for(int i = 0; i < 1000; i++)
             {
                 Vector3 target = new Vector3(Random.Range(-6f,6f),0.5f,Random.Range(-6f,6f));
                 var checkResult = Physics.OverlapSphere(target, 1);
@@ -66,6 +66,8 @@ namespace AssemblyCSharp
                     return target;
                 }
             }
+            //we have tried 1000 locations and none are empty
+            return new Vector3(0, 0.5f, 0);
         }
 	}
 }
