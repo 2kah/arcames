@@ -1,17 +1,20 @@
 using UnityEngine;
 using System.Collections;
 
+//TODO: this object should be a singleton
 public class ScoreKeeper : MonoBehaviour {
  
-    public static int Score;
+    public static float Score;
     
     private int scoreLimit;
     private Ruleset rules;
-    private bool gameOver = false;
+    private bool gameOver = false, won = false;
     
     void Awake()
     {
         Score = 0;
+        gameOver = false;
+        won = false;
     }
     
 	// Use this for initialization
@@ -22,18 +25,18 @@ public class ScoreKeeper : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(Score >= scoreLimit)
+        CheckWinCondition();
+        if(gameOver)
         {
-            gameOver = true;
             Time.timeScale = 0;
             if(Input.GetKeyDown(KeyCode.Space))
             {
                 Time.timeScale = 1;
                 gameOver = false;
+                won = false;
                 Application.LoadLevel(0);
             }
-        }
-            
+        } 
 	}
     
     void OnGUI()
@@ -41,6 +44,28 @@ public class ScoreKeeper : MonoBehaviour {
         //TODO: display score better
         GUI.Label(new Rect(0, 0, 100, 25), "Score: " + Score);
         if(gameOver)
-            GUI.Label(new Rect(50, 50, 100, 50), "You win!\nPress space to play again");
+        {
+            string message = "";
+            if(won)
+                message = "You win!\nPress space to play again";
+            else
+                message = "You lose!\nPress space to play again";
+            GUI.Label(new Rect(50, 50, 100, 50), message);
+        }
+    }
+    
+    private void CheckWinCondition()
+    {
+        if(Score >= scoreLimit)
+        {
+            gameOver = true;
+            won = true;
+        }
+    }
+    
+    public void GameLost()
+    {
+        gameOver = true;
+        won = false;
     }
 }

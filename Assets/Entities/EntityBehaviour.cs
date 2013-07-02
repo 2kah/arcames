@@ -72,6 +72,7 @@ public class EntityBehaviour : CollisionEntity {
 	
 	// Update is called once per frame
 	void Update () {
+        //TODO: work out why util is sometimes null here
         Vector2 moveDirection = util.DirectionToVector(moving);
         moveDirection.Normalize();
         Vector3 newPos = rigidbody.position + (new Vector3(moveDirection.x, 0, moveDirection.y) * speed * Time.deltaTime);
@@ -206,20 +207,19 @@ public class EntityBehaviour : CollisionEntity {
         {
         case EntityType.Player:
             effect = hitPlayer;
-            //TODO: use score effects
             ScoreKeeper.Score += scorePlayer;
             break;
         case EntityType.Red:
             effect = hitRed;
-            ScoreKeeper.Score += (scoreRed / 2);
+            ScoreKeeper.Score += ((float)scoreRed / 2);
             break;
         case EntityType.Green:
             effect = hitGreen;
-            ScoreKeeper.Score += (scoreGreen / 2);
+            ScoreKeeper.Score += ((float)scoreGreen / 2);
             break;
         case EntityType.Blue:
             effect = hitBlue;
-            ScoreKeeper.Score += (scoreBlue / 2);
+            ScoreKeeper.Score += ((float)scoreBlue / 2);
             break;
         }
         ResolveCollision(effect);
@@ -233,6 +233,9 @@ public class EntityBehaviour : CollisionEntity {
             return;
         case CollisionEffect.Teleport:
             Teleport ();
+            return;
+        case CollisionEffect.Death:
+            Destroy(gameObject);
             return;
         //TODO: rest of the effects
         }
