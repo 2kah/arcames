@@ -12,15 +12,16 @@ public class ScoreKeeper : MonoBehaviour {
     
     void Awake()
     {
+        rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         Score = 0;
         gameOver = false;
         won = false;
+        scoreLimit = rules.ScoreLimit;
     }
     
 	// Use this for initialization
 	void Start () {
 	    rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
-        scoreLimit = rules.ScoreLimit;
 	}
 	
 	// Update is called once per frame
@@ -41,7 +42,7 @@ public class ScoreKeeper : MonoBehaviour {
     
     void OnGUI()
     {
-        //TODO: better lookin gui
+        //TODO: better looking gui
         GUI.Label(new Rect(0, 0, 100, 25), "Score: " + Score);
         if(gameOver)
         {

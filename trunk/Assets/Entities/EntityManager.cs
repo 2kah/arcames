@@ -13,22 +13,25 @@ public class EntityManager : MonoBehaviour {
 	void Start () {
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         util = new Util();
-		var redEntity = redPrefab;
-		var greenEntity = greenPrefab;
-		var blueEntity = bluePrefab;
+	}
+    
+    void Awake()
+    {
+        rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+        util = new Util();
         for(int i = 0; i < rules.NumRed; i++)
         {
-            Instantiate(redEntity, util.EmptySpawnPosition(), Quaternion.identity);
+            Instantiate(redPrefab, util.EmptySpawnPosition(), Quaternion.identity);
         }
-		for(int i = 0; i < rules.NumGreen; i++)
-		{
-			Instantiate(greenEntity, util.EmptySpawnPosition(), Quaternion.identity);
-		}
+        for(int i = 0; i < rules.NumGreen; i++)
+        {
+            Instantiate(greenPrefab, util.EmptySpawnPosition(), Quaternion.identity);
+        }
         for(int i = 0; i < rules.NumBlue; i++)
         {
-            Instantiate(blueEntity, util.EmptySpawnPosition(), Quaternion.identity);
+            Instantiate(bluePrefab, util.EmptySpawnPosition(), Quaternion.identity);
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {

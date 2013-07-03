@@ -22,9 +22,14 @@ public class EntityBehaviour : CollisionEntity {
 		player = GameObject.Find("Player");
 		blocked = new bool[5];
         util = new Util();
-        GetRules();
         InvokeRepeating("UpdateMovementDirection", 0, 0.5f);
 	}
+    
+    void Awake()
+    {
+        rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+        GetRules ();
+    }
     
     private void GetRules()
     {

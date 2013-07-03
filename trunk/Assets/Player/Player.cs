@@ -18,10 +18,15 @@ public class Player : CollisionEntity {
         util = new Util();
         scoreKeeper = GameObject.Find("ScoreKeeper").GetComponent<ScoreKeeper>();
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+	}
+    
+    void Awake()
+    {
+        rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         hitRed = rules.PlayerRed;
         hitGreen = rules.PlayerGreen;
         hitBlue = rules.PlayerBlue;
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
