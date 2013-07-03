@@ -1,4 +1,9 @@
 using UnityEngine;
+using System;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace AssemblyCSharp
 {
@@ -60,8 +65,8 @@ namespace AssemblyCSharp
             for(int i = 0; i < 1000; i++)
             {
                 //find an empty position that isn't too close to (0,0) which is where the player spawns
-                float x = Random.value < 0.5 ? Random.Range(-6f,-1.5f) : Random.Range(1.5f, 6f);
-                float z = Random.value < 0.5 ? Random.Range(-6f,-1.5f) : Random.Range(1.5f, 6f);
+                float x = UnityEngine.Random.value < 0.5 ? UnityEngine.Random.Range(-6f,-1.5f) : UnityEngine.Random.Range(1.5f, 6f);
+                float z = UnityEngine.Random.value < 0.5 ? UnityEngine.Random.Range(-6f,-1.5f) : UnityEngine.Random.Range(1.5f, 6f);
                 Vector3 target = new Vector3(x, 0.5f, z);
                 if(PositionEmpty(target))
                     return target;
@@ -81,12 +86,59 @@ namespace AssemblyCSharp
         {
             for(int i = 0; i < 1000; i++)
             {
-                Vector3 target = new Vector3(Random.Range(-6f,6f),0.5f,Random.Range(-6f,6f));
+                Vector3 target = new Vector3(UnityEngine.Random.Range(-6f,6f),0.5f, UnityEngine.Random.Range(-6f,6f));
                 if(PositionEmpty(target))
                     return target;
             }
             //we have tried 1000 locations and none are empty
             return new Vector3(0, 0.5f, 0);
+        }
+        
+        public void SaveRuleset(string path)
+        {
+            //TODO: error checking
+            Rules rules = CopyToRules();
+            var serializer = new XmlSerializer(typeof(Rules));
+            var stream = new FileStream(path, FileMode.Create);
+            serializer.Serialize(stream, rules);
+            stream.Close();
+        }
+        
+        public void LoadRuleset(string path)
+        {
+            //TODO: error checking
+            var serializer = new XmlSerializer(typeof(Rules));
+            var stream = new FileStream(path, FileMode.Open);
+            Rules rules = serializer.Deserialize(stream) as Rules;
+            stream.Close();
+            CopyFromRules(rules);
+        }
+        
+        private Rules CopyToRules()
+        {
+            //http://answers.unity3d.com/questions/252903/c-reflection-get-all-public-variables-from-custom.html
+            Rules rules = new Rules();
+            Ruleset ruleset = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+            Type rulesType = rules.GetType();
+            foreach (FieldInfo field in typeof(Ruleset).GetFields())
+            {
+                FieldInfo other = rulesType.GetField(field.Name);
+                if (other != null)
+                    other.SetValue(rules, field.GetValue(ruleset));
+            }
+            return rules;
+        }
+        
+        private void CopyFromRules(Rules rules)
+        {
+            Ruleset ruleset = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+            Type rulesetType = typeof(Ruleset);
+            foreach (FieldInfo field in typeof(Rules).GetFields())
+            {
+                FieldInfo other = rulesetType.GetField(field.Name);
+                if (other != null)
+                    other.SetValue(ruleset, field.GetValue(rules));
+            }
         }
 	}
 }
