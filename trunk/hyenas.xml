@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Name />
-  <Description />
+  <Name>Hyenas</Name>
+  <Description>Run away from the reds! If they catch you you're dead. Reds die if they hit each other. Kill all reds to win</Description>
   <NumRed>6</NumRed>
   <NumGreen>0</NumGreen>
   <NumBlue>0</NumBlue>
