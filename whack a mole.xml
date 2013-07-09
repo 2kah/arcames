@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Name />
-  <Description />
+  <Name>Whack a mole</Name>
+  <Description>Catch greens to get points, get 3 points to win</Description>
   <NumRed>0</NumRed>
   <NumGreen>3</NumGreen>
   <NumBlue>5</NumBlue>

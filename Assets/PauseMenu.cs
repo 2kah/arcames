@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using AssemblyCSharp;
+using System.IO;
 
 //http://wiki.unity3d.com/index.php?title=PauseMenu
 public class PauseMenu : MonoBehaviour
@@ -23,12 +24,8 @@ public class PauseMenu : MonoBehaviour
  
     public Color statColor = Color.yellow;
  
-    public string[] credits= {
-        "ARCames simple game engine",
-        "Programming by Adam Harwood"} ;
- 
     public enum Page {
-        None,Main,Save,Load,Credits
+        None,Main,Choose,Save,Load
     }
  
     private Page currentPage;
@@ -79,12 +76,30 @@ public class PauseMenu : MonoBehaviour
             GUI.color = statColor;
             switch (currentPage) {
             case Page.Main: MainPauseMenu(); break;
+			case Page.Choose: ShowChoose(); break;
             case Page.Save: ShowSave(); break;
             case Page.Load: ShowLoad(); break;
-            case Page.Credits: ShowCredits(); break;
             }
         }
     }
+	
+	void ShowChoose()
+	{
+		BeginPage(200,200);
+		var di = new DirectoryInfo(System.Environment.CurrentDirectory);
+        var files = di.GetFiles("*.xml");
+        
+        foreach(FileInfo file in files)
+        {
+            if(GUILayout.Button(file.Name))
+            {
+                util.LoadRuleset(file.Name);
+                Application.LoadLevel(0);
+                currentPage = Page.Main;
+            }
+        }
+		EndPage();
+	}
     
     void ShowSave()
     {
@@ -114,49 +129,45 @@ public class PauseMenu : MonoBehaviour
         }
         EndPage();
     }
-
-    void ShowCredits() {
-        BeginPage(300,300);
-        foreach(string credit in credits) {
-            GUILayout.Label(credit);
+ 
+    void ShowBackButton() {
+        if (GUI.Button(new Rect(20, Screen.height - 50, 50, 20),"Back")) {
+            currentPage = Page.Main;
         }
-        EndPage();
     }
  
- void ShowBackButton() {
-     if (GUI.Button(new Rect(20, Screen.height - 50, 50, 20),"Back")) {
-         currentPage = Page.Main;
-     }
- }
+    void BeginPage(int width, int height) {
+        GUILayout.BeginArea( new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
+    }
  
- void BeginPage(int width, int height) {
-     GUILayout.BeginArea( new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
- }
+    void EndPage() {
+        GUILayout.EndArea();
+        if (currentPage != Page.Main) {
+            ShowBackButton();
+        }
+    }
  
- void EndPage() {
-     GUILayout.EndArea();
-     if (currentPage != Page.Main) {
-         ShowBackButton();
-     }
- }
- 
- bool IsBeginning() {
-     return (Time.time < startTime);
- }
+    bool IsBeginning() {
+        return (Time.time < startTime);
+    }
  
  
     void MainPauseMenu() {
         BeginPage(200,200);
+        GUILayout.Label(ruleset.Name);
+        var textStyle = new GUIStyle();
+        textStyle.normal.textColor = Color.black;
+        textStyle.wordWrap = true;
+        GUILayout.Label(ruleset.Description, textStyle);
         if (GUILayout.Button (IsBeginning() ? "Play" : "Continue")) {
             UnPauseGame();
         }
+		if (GUILayout.Button ("Choose Ruleset"))
+			currentPage = Page.Choose;
         if (GUILayout.Button ("Save Ruleset"))
             currentPage = Page.Save;
         if (GUILayout.Button ("Load Ruleset"))
             currentPage = Page.Load;
-        if (GUILayout.Button ("Credits")) {
-            currentPage = Page.Credits;
-        }
         if (IsBrowser() && !IsBeginning() && GUILayout.Button ("Restart")) {
             Application.OpenURL(url);
         }

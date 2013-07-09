@@ -19,7 +19,7 @@ public class Ruleset : MonoBehaviour {
     [System.NonSerialized]
     public Rules rules;
     [System.NonSerialized]
-    public string Name, Description;
+    public string Name = "ARCames", Description;
     [System.NonSerialized]
     public int NumRed, NumGreen, NumBlue;
     [System.NonSerialized]
@@ -27,7 +27,7 @@ public class Ruleset : MonoBehaviour {
     [System.NonSerialized]
     public EntityType RedTarget, GreenTarget, BlueTarget;
     [System.NonSerialized]
-    public int ScoreLimit;
+    public int ScoreLimit = 1;
     [System.NonSerialized]
     public CollisionEffect PlayerRed, PlayerGreen, PlayerBlue, RedPlayer, RedRed, RedGreen, RedBlue, GreenPlayer, GreenRed, GreenGreen, GreenBlue, BluePlayer, BlueRed, BlueGreen, BlueBlue;
     [System.NonSerialized]
