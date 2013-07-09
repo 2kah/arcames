@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name />
+  <Description />
+  <NumRed>0</NumRed>
+  <NumGreen>3</NumGreen>
+  <NumBlue>5</NumBlue>
+  <RedMovement>Chase</RedMovement>
+  <GreenMovement>Flee</GreenMovement>
+  <BlueMovement>Chase</BlueMovement>
+  <RedTarget>Player</RedTarget>
+  <GreenTarget>Player</GreenTarget>
+  <BlueTarget>Green</BlueTarget>
+  <ScoreLimit>3</ScoreLimit>
+  <PlayerRed>Death</PlayerRed>
+  <PlayerGreen>None</PlayerGreen>
+  <PlayerBlue>None</PlayerBlue>
+  <RedPlayer>None</RedPlayer>
+  <RedRed>Death</RedRed>
+  <RedGreen>None</RedGreen>
+  <RedBlue>None</RedBlue>
+  <GreenPlayer>Teleport</GreenPlayer>
+  <GreenRed>None</GreenRed>
+  <GreenGreen>None</GreenGreen>
+  <GreenBlue>Teleport</GreenBlue>
+  <BluePlayer>None</BluePlayer>
+  <BlueRed>None</BlueRed>
+  <BlueGreen>Teleport</BlueGreen>
+  <BlueBlue>None</BlueBlue>
+  <ScorePlayerRed>0</ScorePlayerRed>
+  <ScorePlayerGreen>1</ScorePlayerGreen>
+  <ScorePlayerBlue>0</ScorePlayerBlue>
+  <ScoreRedRed>1</ScoreRedRed>
+  <ScoreRedGreen>0</ScoreRedGreen>
+  <ScoreRedBlue>0</ScoreRedBlue>
+  <ScoreGreenGreen>0</ScoreGreenGreen>
+  <ScoreGreenBlue>0</ScoreGreenBlue>
+  <ScoreBlueBlue>0</ScoreBlueBlue>
+</Rules>
