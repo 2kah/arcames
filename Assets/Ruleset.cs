@@ -10,7 +10,7 @@ using System.IO;
 namespace AssemblyCSharp
 {
     public enum MovementType {Still, RandomShort, RandomLong, Clockwise, AntiClockwise, Chase, Flee};
-    public enum CollisionEffect {None, Death, Teleport, Push};
+    public enum CollisionEffect {None, Death, Teleport};
     public enum EntityType {Red, Green, Blue, Player};
 }
 
