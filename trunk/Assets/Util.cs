@@ -1,9 +1,11 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using AssemblyCSharp;
 
 namespace AssemblyCSharp
 {
@@ -13,8 +15,14 @@ namespace AssemblyCSharp
 	
 	public class Util
 	{
+        public List<Type> InbuiltRules;
+        
 		public Util ()
 		{
+            InbuiltRules = new List<Type>() {
+                typeof(Hyenas),
+                typeof(Rescue),
+                typeof(WhackAMole)};
 		}
 		
 		public Direction Opposite(Direction dir)
