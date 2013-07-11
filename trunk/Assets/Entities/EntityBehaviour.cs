@@ -283,7 +283,7 @@ public class EntityBehaviour : CollisionEntity {
         case CollisionEffect.Death:
             Destroy(gameObject);
             return;
-        //TODO: rest of the effects
+        //TODO: more collision effects
         }
     }
 	

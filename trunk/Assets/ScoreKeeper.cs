@@ -5,17 +5,19 @@ using System.Collections;
 public class ScoreKeeper : MonoBehaviour {
  
     public static float Score;
+    public static bool GameOver = false, Won = false;
     
     private int scoreLimit;
     private Ruleset rules;
-    private bool gameOver = false, won = false;
+    private PauseMenu pauseMenu;
     
     void Awake()
     {
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+        pauseMenu = GameObject.Find("Main Camera").GetComponent<PauseMenu>();
         Score = 0;
-        gameOver = false;
-        won = false;
+        GameOver = false;
+        Won = false;
         scoreLimit = rules.ScoreLimit;
     }
     
@@ -26,47 +28,40 @@ public class ScoreKeeper : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        CheckWinCondition();
-        if(gameOver)
+        if(Time.timeScale > 0)
         {
-            Time.timeScale = 0;
-            if(Input.GetKeyDown(KeyCode.Space))
+            CheckWinCondition();
+            if(GameOver)
             {
-                Time.timeScale = 1;
-                gameOver = false;
-                won = false;
-                Application.LoadLevel(0);
+    //            if(Input.GetKeyDown(KeyCode.Space))
+    //            {
+    //                Time.timeScale = 1;
+    //                GameOver = false;
+    //                Won = false;
+    //            }
+                pauseMenu.PauseGame();
             }
-        } 
+        }
 	}
     
     void OnGUI()
     {
         //TODO: better looking gui
         GUI.Label(new Rect(0, 0, 100, 25), "Score: " + Score);
-        if(gameOver)
-        {
-            string message = "";
-            if(won)
-                message = "You win!\nPress space to play again";
-            else
-                message = "You lose!\nPress space to play again";
-            GUI.Label(new Rect(50, 50, 100, 60), message);
-        }
     }
     
     private void CheckWinCondition()
     {
         if(Score >= scoreLimit)
         {
-            gameOver = true;
-            won = true;
+            GameOver = true;
+            Won = true;
         }
     }
     
     public void GameLost()
     {
-        gameOver = true;
-        won = false;
+        GameOver = true;
+        Won = false;
     }
 }

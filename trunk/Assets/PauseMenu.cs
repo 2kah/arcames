@@ -165,19 +165,30 @@ public class PauseMenu : MonoBehaviour
     }
  
     bool IsBeginning() {
-        return (Time.time < startTime);
+        return (Time.timeSinceLevelLoad < startTime);
     }
  
  
     void MainPauseMenu() {
         BeginPage(200,200);
+        if(ScoreKeeper.GameOver)
+        {
+            string message = "";
+            if(ScoreKeeper.Won)
+                message = "You win!";
+            else
+                message = "You lose!";
+            GUILayout.Label(message);
+        }
         GUILayout.Label(ruleset.Name);
         var textStyle = new GUIStyle();
         textStyle.normal.textColor = Color.black;
         textStyle.wordWrap = true;
         GUILayout.Label(ruleset.Description, textStyle);
-        if (GUILayout.Button (IsBeginning() ? "Play" : "Continue")) {
-            UnPauseGame();
+        if(!ScoreKeeper.GameOver)
+        {
+            if (GUILayout.Button (IsBeginning() ? "Play" : "Continue"))
+                UnPauseGame();
         }
         if (!IsBeginning())
         {
@@ -195,12 +206,13 @@ public class PauseMenu : MonoBehaviour
         EndPage();
     }
  
- void PauseGame() {
-     savedTimeScale = Time.timeScale;
-     Time.timeScale = 0;
-     AudioListener.pause = true;
-     currentPage = Page.Main;
- }
+    public void PauseGame()
+    {
+        savedTimeScale = Time.timeScale;
+        Time.timeScale = 0;
+        AudioListener.pause = true;
+        currentPage = Page.Main;
+    }
  
  void UnPauseGame() {
      Time.timeScale = savedTimeScale;
