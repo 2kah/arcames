@@ -14,6 +14,7 @@ namespace AssemblyCSharp
     public enum EntityType {Red, Green, Blue, Player};
 }
 
+//TODO: this could be a singleton
 public class Ruleset : MonoBehaviour {
 
     [System.NonSerialized]
@@ -31,9 +32,19 @@ public class Ruleset : MonoBehaviour {
     [System.NonSerialized]
     public int ScorePlayerRed, ScorePlayerGreen, ScorePlayerBlue, ScoreRedRed, ScoreRedGreen, ScoreRedBlue, ScoreGreenGreen, ScoreGreenBlue, ScoreBlueBlue;
     
+    private Util util;
+    private static bool firstAwake = true;
+    
     void Awake()
     {
         DontDestroyOnLoad(this);
+        util = new Util();
+        if(firstAwake)
+        {
+            Type rulesType = util.InbuiltRules[UnityEngine.Random.Range(0, util.InbuiltRules.Count)];
+            util.CopyFromRules((Rules)Activator.CreateInstance(rulesType));
+            firstAwake = false;
+        }
     }
     
     void Start()
