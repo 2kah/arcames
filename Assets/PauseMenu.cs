@@ -179,15 +179,19 @@ public class PauseMenu : MonoBehaviour
         if (GUILayout.Button (IsBeginning() ? "Play" : "Continue")) {
             UnPauseGame();
         }
+        if (!IsBeginning())
+        {
+            if(GUILayout.Button ("Restart"))
+            {
+                Application.LoadLevel(0);
+            }
+        }
 		if (GUILayout.Button ("Choose Ruleset"))
 			currentPage = Page.Choose;
         if (GUILayout.Button ("Save Ruleset"))
             currentPage = Page.Save;
         if (GUILayout.Button ("Load Ruleset"))
             currentPage = Page.Load;
-        if (IsBrowser() && !IsBeginning() && GUILayout.Button ("Restart")) {
-            Application.OpenURL(url);
-        }
         EndPage();
     }
  
