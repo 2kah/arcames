@@ -17,8 +17,6 @@ namespace AssemblyCSharp
 public class Ruleset : MonoBehaviour {
 
     [System.NonSerialized]
-    public Rules rules;
-    [System.NonSerialized]
     public string Name = "ARCames", Description;
     [System.NonSerialized]
     public int NumRed, NumGreen, NumBlue;
@@ -40,7 +38,6 @@ public class Ruleset : MonoBehaviour {
     
     void Start()
     {
-        rules = new Rules();
     }
     
     void Update()

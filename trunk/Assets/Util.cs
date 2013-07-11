@@ -34,6 +34,21 @@ namespace AssemblyCSharp
 			}
 		}
         
+        public Direction RightTurn(Direction dir)
+        {
+            if(dir == Direction.None)
+                return Direction.None;
+            //TODO: write general purpose function: ((dir + amount of rotation - 1) % 4) + 1
+            return (Direction)(((int) dir % 4) + 1);
+        }
+        
+        public Direction LeftTurn(Direction dir)
+        {
+            if(dir == Direction.None)
+                return Direction.None;
+            return (Direction)(((int) (dir - 2) % 4) + 1);
+        }
+        
         public Axis GetAxis(Direction dir)
         {
             if(dir == Direction.Left || dir == Direction.Right)
@@ -129,7 +144,7 @@ namespace AssemblyCSharp
             return rules;
         }
         
-        private void CopyFromRules(Rules rules)
+        public void CopyFromRules(Rules rules)
         {
             Ruleset ruleset = GameObject.Find("Ruleset").GetComponent<Ruleset>();
             Type rulesetType = typeof(Ruleset);

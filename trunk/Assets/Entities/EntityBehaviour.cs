@@ -15,6 +15,8 @@ public class EntityBehaviour : CollisionEntity {
     private Direction moving;
     private Util util;
     private Ruleset rules;
+    private float randomLongMoveTime = 2f;
+    private float randomLongEndTime = 0f;
 	
 	// Use this for initialization
 	void Start () {
@@ -94,6 +96,22 @@ public class EntityBehaviour : CollisionEntity {
     {
         switch(movementType)
         {
+        case MovementType.Still:
+            return Direction.None;
+        case MovementType.RandomShort:
+            return RandomDirection();
+        case MovementType.RandomLong:
+            if(Time.timeSinceLevelLoad >= randomLongEndTime)
+            {
+                randomLongEndTime = Time.timeSinceLevelLoad + randomLongMoveTime;
+                return RandomDirection();
+            }
+            else
+                return moving;
+        case MovementType.Clockwise:
+            return CircularMove(true);
+        case MovementType.AntiClockwise:
+            return CircularMove(false);
         case MovementType.Flee:
             return TargetMove(true);
         case MovementType.Chase:
@@ -101,6 +119,26 @@ public class EntityBehaviour : CollisionEntity {
         default:
             return Direction.None;
         }
+    }
+    
+    private Direction RandomDirection()
+    {
+        return (Direction) Random.Range(0,4);
+    }
+    
+    private Direction CircularMove(bool clockwise)
+    {
+        Direction desiredMove = moving;
+        //for each of the 4 directions starting with the current move direction
+        for(int i = 0; i < 4; i++)
+        {
+            //check if we can move in the given direction
+            if(!blocked[(int)desiredMove])
+                return desiredMove;
+            else
+                desiredMove = clockwise ? util.RightTurn(desiredMove) : util.LeftTurn(desiredMove);
+        }
+        return Direction.None;
     }
     
     private Direction TargetMove(bool away)
@@ -181,6 +219,9 @@ public class EntityBehaviour : CollisionEntity {
                 nearestDistance = distSquared;
             }
         }
+        if(nearest == null)
+            nearest = gameObject;
+        
         return new Vector2(nearest.transform.position.x, nearest.transform.position.z);
     }
     

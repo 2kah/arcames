@@ -17,6 +17,8 @@ public class PauseMenu : MonoBehaviour
     private Ruleset ruleset;
     private string filename = "rules.xml";
     private Util util;
+    private int numInbuiltRules = 3;
+    private Rules[] inbuiltRules;
     
     public GameObject start;
  
@@ -35,6 +37,10 @@ public class PauseMenu : MonoBehaviour
         ruleset = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         Time.timeScale = 1;
         PauseGame();
+        inbuiltRules = new Rules[numInbuiltRules];
+        inbuiltRules[0] = new Hyenas();
+        inbuiltRules[1] = new WhackAMole();
+        inbuiltRules[2] = new Rescue();
     }
  
     static bool IsDashboard() {
@@ -86,18 +92,29 @@ public class PauseMenu : MonoBehaviour
 	void ShowChoose()
 	{
 		BeginPage(200,200);
-		var di = new DirectoryInfo(System.Environment.CurrentDirectory);
-        var files = di.GetFiles("*.xml");
+//		DirectoryInfo di = new DirectoryInfo(System.Environment.CurrentDirectory);
+//        FileInfo[] files = di.GetFiles("*.xml");
+//        
+//        foreach(FileInfo file in files)
+//        {
+//            if(GUILayout.Button(file.Name))
+//            {
+//                util.LoadRuleset(file.Name);
+//                Application.LoadLevel(0);
+//                currentPage = Page.Main;
+//            }
+//        }
         
-        foreach(FileInfo file in files)
+        foreach(Rules rules in inbuiltRules)
         {
-            if(GUILayout.Button(file.Name))
+            if(GUILayout.Button(rules.Name))
             {
-                util.LoadRuleset(file.Name);
+                util.CopyFromRules(rules);
                 Application.LoadLevel(0);
                 currentPage = Page.Main;
             }
         }
+        
 		EndPage();
 	}
     
