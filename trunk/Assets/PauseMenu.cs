@@ -19,6 +19,7 @@ public class PauseMenu : MonoBehaviour
     private Util util;
     private Rules[] inbuiltRules;
     private Vector2 scrollPosition;
+    private string importXml = "";
     
     public GameObject start;
  
@@ -128,10 +129,11 @@ public class PauseMenu : MonoBehaviour
         scrollPosition = GUILayout.BeginScrollView(scrollPosition);
         GUILayout.TextArea(xml);
         GUILayout.EndScrollView();
-        TextEditor te = new TextEditor();
-        te.content = new GUIContent(xml);
+        
         if(GUILayout.Button("Copy all"))
         {
+            TextEditor te = new TextEditor();
+            te.content = new GUIContent(xml);
             te.SelectAll();
             te.Copy();
         }
@@ -149,6 +151,17 @@ public class PauseMenu : MonoBehaviour
     void ShowImport()
     {
         BeginPage(200,200);
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        importXml = GUILayout.TextArea(importXml);
+        GUILayout.EndScrollView();
+        
+        if(GUILayout.Button("Import"))
+        {
+            util.ImportRuleset(importXml);
+            importXml = "";
+            Application.LoadLevel(0);
+            currentPage = Page.Main;
+        }
 //        filename = GUILayout.TextField(filename);
 //        if(GUILayout.Button("Load"))
 //        {
