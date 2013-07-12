@@ -128,25 +128,35 @@ namespace AssemblyCSharp
             return builder.ToString();
         }
         
-        public void SaveRuleset(string path)
+        public void ImportRuleset(string xml)
         {
             //TODO: error checking
-            Rules rules = CopyToRules();
+            Rules rules;
             var serializer = new XmlSerializer(typeof(Rules));
-            var stream = new FileStream(path, FileMode.Create);
-            serializer.Serialize(stream, rules);
-            stream.Close();
-        }
-        
-        public void LoadRuleset(string path)
-        {
-            //TODO: error checking
-            var serializer = new XmlSerializer(typeof(Rules));
-            var stream = new FileStream(path, FileMode.Open);
-            Rules rules = serializer.Deserialize(stream) as Rules;
-            stream.Close();
+            using (TextReader reader = new StringReader(xml))
+                rules = (Rules) serializer.Deserialize(reader);
             CopyFromRules(rules);
         }
+        
+//        public void SaveRuleset(string path)
+//        {
+//            //TODO: error checking
+//            Rules rules = CopyToRules();
+//            var serializer = new XmlSerializer(typeof(Rules));
+//            var stream = new FileStream(path, FileMode.Create);
+//            serializer.Serialize(stream, rules);
+//            stream.Close();
+//        }
+//        
+//        public void LoadRuleset(string path)
+//        {
+//            //TODO: error checking
+//            var serializer = new XmlSerializer(typeof(Rules));
+//            var stream = new FileStream(path, FileMode.Open);
+//            Rules rules = serializer.Deserialize(stream) as Rules;
+//            stream.Close();
+//            CopyFromRules(rules);
+//        }
         
         private Rules CopyToRules()
         {
