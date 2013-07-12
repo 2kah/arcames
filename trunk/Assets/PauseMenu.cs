@@ -16,9 +16,9 @@ public class PauseMenu : MonoBehaviour
     
     private float savedTimeScale;
     private Ruleset ruleset;
-    private string filename = "rules.xml";
     private Util util;
     private Rules[] inbuiltRules;
+    private Vector2 scrollPosition;
     
     public GameObject start;
  
@@ -27,7 +27,7 @@ public class PauseMenu : MonoBehaviour
     public Color statColor = Color.yellow;
  
     public enum Page {
-        None,Main,Choose,Save,Load
+        None,Main,Choose,Export,Import
     }
  
     private Page currentPage;
@@ -43,6 +43,7 @@ public class PauseMenu : MonoBehaviour
             Type rulesType = util.InbuiltRules[i];
             inbuiltRules[i] = (Rules)Activator.CreateInstance(rulesType);
         }
+        scrollPosition = Vector2.zero;
     }
  
     static bool IsDashboard() {
@@ -85,8 +86,8 @@ public class PauseMenu : MonoBehaviour
             switch (currentPage) {
             case Page.Main: MainPauseMenu(); break;
 			case Page.Choose: ShowChoose(); break;
-            case Page.Save: ShowSave(); break;
-            case Page.Load: ShowLoad(); break;
+            case Page.Export: ShowExport(); break;
+            case Page.Import: ShowImport(); break;
             }
         }
     }
@@ -120,32 +121,41 @@ public class PauseMenu : MonoBehaviour
 		EndPage();
 	}
     
-    void ShowSave()
+    void ShowExport()
     {
         BeginPage(200,200);
-        //TODO: proper file save dialog
-        filename = GUILayout.TextField(filename);
-        if(GUILayout.Button("Save"))
+        string xml = util.ExportRuleset();
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        GUILayout.TextArea(xml);
+        GUILayout.EndScrollView();
+        TextEditor te = new TextEditor();
+        te.content = new GUIContent(xml);
+        if(GUILayout.Button("Copy all"))
         {
-            if(!filename.EndsWith(".xml"))
-                filename = filename.Insert(filename.Length, ".xml");
-            util.SaveRuleset(filename);
-            currentPage = Page.Main;
+            te.SelectAll();
+            te.Copy();
         }
+//        filename = GUILayout.TextField(filename);
+//        if(GUILayout.Button("Save"))
+//        {
+//            if(!filename.EndsWith(".xml"))
+//                filename = filename.Insert(filename.Length, ".xml");
+//            util.SaveRuleset(filename);
+//            currentPage = Page.Main;
+//        }
         EndPage();
     }
     
-    void ShowLoad()
+    void ShowImport()
     {
         BeginPage(200,200);
-        //TODO: proper file browse dialog
-        filename = GUILayout.TextField(filename);
-        if(GUILayout.Button("Load"))
-        {
-            util.LoadRuleset(filename);
-            Application.LoadLevel(0);
-            currentPage = Page.Main;
-        }
+//        filename = GUILayout.TextField(filename);
+//        if(GUILayout.Button("Load"))
+//        {
+//            util.LoadRuleset(filename);
+//            Application.LoadLevel(0);
+//            currentPage = Page.Main;
+//        }
         EndPage();
     }
  
@@ -201,10 +211,10 @@ public class PauseMenu : MonoBehaviour
         }
 		if (GUILayout.Button ("Choose Ruleset"))
 			currentPage = Page.Choose;
-        if (GUILayout.Button ("Save Ruleset"))
-            currentPage = Page.Save;
-        if (GUILayout.Button ("Load Ruleset"))
-            currentPage = Page.Load;
+        if (GUILayout.Button ("Export Ruleset"))
+            currentPage = Page.Export;
+        if (GUILayout.Button ("Import Ruleset"))
+            currentPage = Page.Import;
         EndPage();
     }
  

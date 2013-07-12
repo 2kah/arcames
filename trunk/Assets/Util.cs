@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using System.Text;
 using AssemblyCSharp;
 
 namespace AssemblyCSharp
@@ -115,6 +116,16 @@ namespace AssemblyCSharp
             }
             //we have tried 1000 locations and none are empty
             return new Vector3(0, 0.5f, 0);
+        }
+        
+        public string ExportRuleset()
+        {
+            Rules rules = CopyToRules();
+            StringBuilder builder = new StringBuilder();
+            var serializer = new XmlSerializer(typeof(Rules));
+            using(TextWriter writer = new StringWriter(builder))
+                serializer.Serialize(writer, rules);
+            return builder.ToString();
         }
         
         public void SaveRuleset(string path)
