@@ -14,7 +14,7 @@ namespace AssemblyCSharp
             ScoreLimit = 6;
             PlayerRed = CollisionEffect.Death;
             RedRed = CollisionEffect.Death;
-            ScoreRedRed = 1;
+            ScoreRedRed = 2;
         }
     }
 }
