@@ -258,15 +258,15 @@ public class EntityBehaviour : CollisionEntity {
             break;
         case EntityType.Red:
             effect = hitRed;
-            ScoreKeeper.Score += ((float)scoreRed / 2);
+            ScoreKeeper.Score += ((float)scoreRed / 4);
             break;
         case EntityType.Green:
             effect = hitGreen;
-            ScoreKeeper.Score += ((float)scoreGreen / 2);
+            ScoreKeeper.Score += ((float)scoreGreen / 4);
             break;
         case EntityType.Blue:
             effect = hitBlue;
-            ScoreKeeper.Score += ((float)scoreBlue / 2);
+            ScoreKeeper.Score += ((float)scoreBlue / 4);
             break;
         }
         ResolveCollision(effect);
