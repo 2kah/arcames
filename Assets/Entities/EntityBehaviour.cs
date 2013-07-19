@@ -15,7 +15,8 @@ public class EntityBehaviour : CollisionEntity {
     private Direction moving;
     private Util util;
     private Ruleset rules;
-    private float randomLongMoveTime = 2f;
+    private float randomLongMaxTime = 3f;
+    private float randomLongMinTime = 0.5f;
     private float randomLongEndTime = 0f;
 	
 	// Use this for initialization
@@ -103,7 +104,7 @@ public class EntityBehaviour : CollisionEntity {
         case MovementType.RandomLong:
             if(Time.timeSinceLevelLoad >= randomLongEndTime)
             {
-                randomLongEndTime = Time.timeSinceLevelLoad + randomLongMoveTime;
+                randomLongEndTime = Time.timeSinceLevelLoad + Random.Range(randomLongMinTime, randomLongMaxTime);
                 return RandomDirection();
             }
             else
@@ -123,7 +124,7 @@ public class EntityBehaviour : CollisionEntity {
     
     private Direction RandomDirection()
     {
-        return (Direction) Random.Range(0,4);
+        return (Direction) Random.Range(1,5);
     }
     
     private Direction CircularMove(bool clockwise)
