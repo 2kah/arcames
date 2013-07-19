@@ -8,11 +8,9 @@ using System.IO;
 public class PauseMenu : MonoBehaviour
 {
  
-    public GUISkin skin;
+    public GUISkin Skin;
     
     private float startTime = 0.1f;
- 
-    public Material mat;
     
     private float savedTimeScale;
     private Ruleset ruleset;
@@ -20,15 +18,16 @@ public class PauseMenu : MonoBehaviour
     private Rules[] inbuiltRules;
     private Vector2 scrollPosition;
     private string importXml = "";
+    private Rules editRules;
+    private string scoreLimit, numRed, numGreen, numBlue, scorePlayerRed, scorePlayerGreen, scorePlayerBlue, scoreRedRed, scoreRedGreen, scoreRedBlue, scoreGreenGreen, scoreGreenBlue, scoreBlueBlue;
+    private string[] movementTypes, entityTypes, collisionEffects;
+    
+    public GUIStyle redBackground, greenBackground, blueBackground;
     
     public GameObject start;
  
-    public string url = "http://2kah.co.uk";
- 
-    public Color statColor = Color.yellow;
- 
     public enum Page {
-        None,Main,Choose,Export,Import
+        None,Main,Choose,Edit,Export,Import
     }
  
     private Page currentPage;
@@ -44,6 +43,9 @@ public class PauseMenu : MonoBehaviour
             Type rulesType = util.InbuiltRules[i];
             inbuiltRules[i] = (Rules)Activator.CreateInstance(rulesType);
         }
+        movementTypes = Enum.GetNames(typeof(MovementType));
+        entityTypes = Enum.GetNames(typeof(EntityType));
+        collisionEffects = Enum.GetNames(typeof(CollisionEffect));
         scrollPosition = Vector2.zero;
     }
  
@@ -79,14 +81,13 @@ public class PauseMenu : MonoBehaviour
     }
 
     void OnGUI () {
-        if (skin != null) {
-            GUI.skin = skin;
-        }
+        GUI.skin = Skin;
         if (IsGamePaused()) {
-            GUI.color = statColor;
+            GUI.Box(new Rect(0,0,Screen.width,Screen.height),"");
             switch (currentPage) {
             case Page.Main: MainPauseMenu(); break;
 			case Page.Choose: ShowChoose(); break;
+            case Page.Edit: ShowEdit(); break;
             case Page.Export: ShowExport(); break;
             case Page.Import: ShowImport(); break;
             }
@@ -95,7 +96,7 @@ public class PauseMenu : MonoBehaviour
 	
 	void ShowChoose()
 	{
-		BeginPage(200,200);
+		BeginPage();
 //		DirectoryInfo di = new DirectoryInfo(System.Environment.CurrentDirectory);
 //        FileInfo[] files = di.GetFiles("*.xml");
 //        
@@ -122,9 +123,252 @@ public class PauseMenu : MonoBehaviour
 		EndPage();
 	}
     
+    void SetupEdit()
+    {
+        editRules = util.CopyToRules();
+        scoreLimit = editRules.ScoreLimit.ToString();
+        numRed = editRules.NumRed.ToString();
+        numGreen = editRules.NumGreen.ToString();
+        numBlue = editRules.NumBlue.ToString();
+        scorePlayerRed = editRules.ScorePlayerRed.ToString();
+        scorePlayerGreen = editRules.ScorePlayerGreen.ToString();
+        scorePlayerBlue = editRules.ScorePlayerBlue.ToString();
+        scoreRedRed = editRules.ScoreRedRed.ToString();
+        scoreRedGreen = editRules.ScoreRedGreen.ToString();
+        scoreRedBlue = editRules.ScoreRedBlue.ToString();
+        scoreGreenGreen = editRules.ScoreGreenGreen.ToString();
+        scoreGreenBlue = editRules.ScoreGreenBlue.ToString();
+        scoreBlueBlue = editRules.ScoreBlueBlue.ToString();
+    }
+    
+    void ShowEdit()
+    {
+        BeginPage();
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        
+        BeginEditControls("Name",null);
+        editRules.Name = GUILayout.TextField(editRules.Name);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Description",null);
+        editRules.Description = GUILayout.TextArea(editRules.Description);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Score Limit",null);
+        scoreLimit = GUILayout.TextField(scoreLimit);
+        editRules.ScoreLimit = StringToInt(scoreLimit);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Number of Reds", redBackground);
+        numRed = GUILayout.TextField(numRed);
+        editRules.NumRed = StringToInt(numRed);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Number of Greens", greenBackground);
+        numGreen = GUILayout.TextField(numGreen);
+        editRules.NumGreen = StringToInt(numGreen);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Number of Blues", blueBackground);
+        numBlue = GUILayout.TextField(numBlue);
+        editRules.NumBlue = StringToInt(numBlue);
+        GUILayout.EndHorizontal();
+        
+        if(editRules.NumRed > 0)
+        {
+            BeginEditControls("Red Movement", redBackground);
+            editRules.RedMovement = (MovementType) GUILayout.SelectionGrid((int)editRules.RedMovement,movementTypes,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            if(editRules.RedMovement == MovementType.Chase || editRules.RedMovement == MovementType.Flee)
+            {
+                BeginEditControls("Red Target", redBackground);
+                editRules.RedTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.RedTarget,entityTypes,4,"toggle");
+                GUILayout.EndHorizontal();
+            }
+        }
+        
+        if(editRules.NumGreen > 0)
+        {
+            BeginEditControls("Green Movement", greenBackground);
+            editRules.GreenMovement = (MovementType) GUILayout.SelectionGrid((int)editRules.GreenMovement,movementTypes,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            if(editRules.GreenMovement == MovementType.Chase || editRules.GreenMovement == MovementType.Flee)
+            {
+                BeginEditControls("Green Target", greenBackground);
+                editRules.GreenTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.GreenTarget,entityTypes,4,"toggle");
+                GUILayout.EndHorizontal();
+            }
+        }
+        
+        if(editRules.NumBlue > 0)
+        {
+            BeginEditControls("Blue Movement", blueBackground);
+            editRules.BlueMovement = (MovementType) GUILayout.SelectionGrid((int)editRules.BlueMovement,movementTypes,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            if(editRules.BlueMovement == MovementType.Chase || editRules.BlueMovement == MovementType.Flee)
+            {
+                BeginEditControls("Blue Target", blueBackground);
+                editRules.BlueTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.BlueTarget,entityTypes,4,"toggle");
+                GUILayout.EndHorizontal();
+            }
+        }
+        
+        if(editRules.NumRed > 0)
+        {
+            BeginEditControls("Player When Hit Red", null);
+            editRules.PlayerRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerRed,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Red When Hit Player", redBackground);
+            editRules.RedPlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedPlayer,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Red When Hit Red", redBackground);
+            editRules.RedRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedRed,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+        }
+        
+        if(editRules.NumGreen > 0)
+        {
+            BeginEditControls("Player When Hit Green",null);
+            editRules.PlayerGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerGreen,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Green When Hit Player", greenBackground);
+            editRules.GreenPlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenPlayer,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Green When Hit Green", greenBackground);
+            editRules.GreenGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenGreen,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+        }
+        
+        if(editRules.NumBlue > 0)
+        {
+            BeginEditControls("Player When Hit Blue",null);
+            editRules.PlayerBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerBlue,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Blue When Hit Player", blueBackground);
+            editRules.BluePlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BluePlayer,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Blue When Hit Blue", blueBackground);
+            editRules.BlueBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueBlue,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+        }
+        
+        if(editRules.NumRed > 0 && editRules.NumGreen > 0)
+        {
+            BeginEditControls("Red When Hit Green", redBackground);
+            editRules.RedGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedGreen,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Green When Hit Red", greenBackground);
+            editRules.GreenRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenRed,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+        }
+        
+        if(editRules.NumRed > 0 && editRules.NumBlue > 0)
+        {
+            BeginEditControls("Red When Hit Blue", redBackground);
+            editRules.RedBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedBlue,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Blue When Hit Red", blueBackground);
+            editRules.BlueRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueRed,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+        }
+        
+        if(editRules.NumGreen > 0 && editRules.NumBlue > 0)
+        {
+            BeginEditControls("Green When Hit Blue", greenBackground);
+            editRules.GreenBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenBlue,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+            
+            BeginEditControls("Blue When Hit Green", blueBackground);
+            editRules.BlueGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueGreen,collisionEffects,3,"toggle");
+            GUILayout.EndHorizontal();
+        }
+        
+        BeginEditControls("Collision Scores",null);
+        //GUILayout.BeginHorizontal();
+        GUILayout.BeginVertical();
+        SizedLabel("");
+        SizedLabel("Player");
+        SizedLabel("Red");
+        SizedLabel("Green");
+        SizedLabel("Blue");
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical();
+        GUILayout.Label("Red", GUILayout.MinWidth(40));
+        scorePlayerRed = GUILayout.TextField(scorePlayerRed);
+        editRules.ScorePlayerRed = StringToInt(scorePlayerRed);
+        scoreRedRed = GUILayout.TextField(scoreRedRed);
+        editRules.ScoreRedRed = StringToInt(scoreRedRed);
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical();
+        GUILayout.Label("Green", GUILayout.MinWidth(40));
+        scorePlayerGreen = GUILayout.TextField(scorePlayerGreen);
+        editRules.ScorePlayerGreen = StringToInt(scorePlayerGreen);
+        scoreRedGreen = GUILayout.TextField(scoreRedGreen);
+        editRules.ScoreRedGreen = StringToInt(scoreRedGreen);
+        scoreGreenGreen = GUILayout.TextField(scoreGreenGreen);
+        editRules.ScoreGreenGreen = StringToInt(scoreGreenGreen);
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical();
+        GUILayout.Label("Blue", GUILayout.MinWidth(40));
+        scorePlayerBlue = GUILayout.TextField(scorePlayerBlue);
+        editRules.ScorePlayerBlue = StringToInt(scorePlayerBlue);
+        scoreRedBlue = GUILayout.TextField(scoreRedBlue);
+        editRules.ScoreRedBlue = StringToInt(scoreRedBlue);
+        scoreGreenBlue = GUILayout.TextField(scoreGreenBlue);
+        editRules.ScoreGreenBlue = StringToInt(scoreGreenBlue);
+        scoreBlueBlue = GUILayout.TextField(scoreBlueBlue);
+        editRules.ScoreBlueBlue = StringToInt(scoreBlueBlue);
+        GUILayout.EndVertical();
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        
+        
+        GUILayout.EndScrollView();
+        if(GUILayout.Button("Save Changes"))
+        {
+            util.CopyFromRules(editRules);
+            Application.LoadLevel(0);
+            currentPage = Page.Main;
+        }
+        EndPage();
+    }
+    
+    private void SizedLabel(string text)
+    {
+        //create a label with minimum width of the width of the content
+        GUIContent str = new GUIContent(text);
+        GUILayout.Label(str, GUILayout.MinWidth(Skin.GetStyle("label").CalcSize(str).x));
+    }
+    
+    private void BeginEditControls(string name, GUIStyle style)
+    {
+        if(style == null)
+            GUILayout.BeginHorizontal();
+        else
+            GUILayout.BeginHorizontal(style);
+        SizedLabel(name);
+        GUILayout.FlexibleSpace();
+    }
+    
+    private int StringToInt(string str)
+    {
+        return Convert.ToInt32(str == "" ? "0" : str);
+    }
+    
     void ShowExport()
     {
-        BeginPage(200,200);
+        BeginPage();
         string xml = util.ExportRuleset();
         scrollPosition = GUILayout.BeginScrollView(scrollPosition);
         GUILayout.TextArea(xml);
@@ -150,7 +394,7 @@ public class PauseMenu : MonoBehaviour
     
     void ShowImport()
     {
-        BeginPage(200,200);
+        BeginPage();
         scrollPosition = GUILayout.BeginScrollView(scrollPosition);
         importXml = GUILayout.TextArea(importXml);
         GUILayout.EndScrollView();
@@ -178,8 +422,10 @@ public class PauseMenu : MonoBehaviour
         }
     }
  
-    void BeginPage(int width, int height) {
-        GUILayout.BeginArea( new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
+    void BeginPage()
+    {
+        GUILayout.BeginArea(new Rect(Screen.width / 4, Screen.height / 4, Screen.width / 2, Screen.height / 2));
+        //GUILayout.BeginArea( new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
     }
  
     void EndPage() {
@@ -195,7 +441,7 @@ public class PauseMenu : MonoBehaviour
  
  
     void MainPauseMenu() {
-        BeginPage(200,200);
+        BeginPage();
         if(ScoreKeeper.GameOver)
         {
             string message = "";
@@ -206,10 +452,10 @@ public class PauseMenu : MonoBehaviour
             GUILayout.Label(message);
         }
         GUILayout.Label(ruleset.Name);
-        var textStyle = new GUIStyle();
-        textStyle.normal.textColor = Color.black;
-        textStyle.wordWrap = true;
-        GUILayout.Label(ruleset.Description, textStyle);
+//        var textStyle = new GUIStyle();
+//        textStyle.normal.textColor = Color.black;
+//        textStyle.wordWrap = true;
+        GUILayout.Label(ruleset.Description/*, textStyle*/);
         if(!ScoreKeeper.GameOver)
         {
             if (GUILayout.Button (IsBeginning() ? "Play" : "Continue"))
@@ -224,6 +470,11 @@ public class PauseMenu : MonoBehaviour
         }
 		if (GUILayout.Button ("Choose Ruleset"))
 			currentPage = Page.Choose;
+        if (GUILayout.Button ("Edit Ruleset"))
+        {
+            SetupEdit();
+            currentPage = Page.Edit;
+        }
         if (GUILayout.Button ("Export Ruleset"))
             currentPage = Page.Export;
         if (GUILayout.Button ("Import Ruleset"))

@@ -158,7 +158,7 @@ namespace AssemblyCSharp
 //            CopyFromRules(rules);
 //        }
         
-        private Rules CopyToRules()
+        public Rules CopyToRules()
         {
             //http://answers.unity3d.com/questions/252903/c-reflection-get-all-public-variables-from-custom.html
             Rules rules = new Rules();
