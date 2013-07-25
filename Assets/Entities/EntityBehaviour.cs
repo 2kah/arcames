@@ -4,8 +4,7 @@ using AssemblyCSharp;
 
 public class EntityBehaviour : CollisionEntity {
 	
-	public float speed;
-    
+	private float speed;
     private MovementType movementType;
     private CollisionEffect hitPlayer, hitRed, hitGreen, hitBlue;
     private int scorePlayer, scoreRed, scoreGreen, scoreBlue;
@@ -39,6 +38,7 @@ public class EntityBehaviour : CollisionEntity {
         //TODO: better way of doing this
         if(entityType == EntityType.Red)
         {
+            speed = rules.RedSpeed;
             movementType = rules.RedMovement;
             hitPlayer = rules.RedPlayer;
             hitRed = rules.RedRed;
@@ -52,6 +52,7 @@ public class EntityBehaviour : CollisionEntity {
         }
         else if(entityType == EntityType.Green)
         {
+            speed = rules.GreenSpeed;
             movementType = rules.GreenMovement;
             hitPlayer = rules.GreenPlayer;
             hitRed = rules.GreenRed;
@@ -65,6 +66,7 @@ public class EntityBehaviour : CollisionEntity {
         }
         else if(entityType == EntityType.Blue)
         {
+            speed = rules.BlueSpeed;
             movementType = rules.BlueMovement;
             hitPlayer = rules.BluePlayer;
             hitRed = rules.BlueRed;

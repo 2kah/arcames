@@ -5,10 +5,9 @@ using AssemblyCSharp;
 
 public class Player : CollisionEntity {
 	
-	public float speed;
-	
 	private Vector2 movementDir = new Vector2(0f,0f);
     private CollisionEffect hitRed, hitGreen, hitBlue;
+    private float speed;
     private Ruleset rules;
     private ScoreKeeper scoreKeeper;
     private Util util;
@@ -26,6 +25,7 @@ public class Player : CollisionEntity {
         hitRed = rules.PlayerRed;
         hitGreen = rules.PlayerGreen;
         hitBlue = rules.PlayerBlue;
+        speed = rules.PlayerSpeed;
     }
 	
 	// Update is called once per frame
