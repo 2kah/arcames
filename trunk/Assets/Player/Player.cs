@@ -33,24 +33,24 @@ public class Player : CollisionEntity {
         //TODO: use input axis
 		if(Input.anyKeyDown)
 		{
-			if(Input.GetKeyDown(KeyCode.W))
+			if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
 				movementDir = util.DirectionToVector(Direction.Up);
-			else if(Input.GetKeyDown(KeyCode.S))
+			else if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
 				movementDir = util.DirectionToVector(Direction.Down);
-			else if(Input.GetKeyDown(KeyCode.D))
+			else if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
 				movementDir = util.DirectionToVector(Direction.Right);
-			else if(Input.GetKeyDown(KeyCode.A))
+			else if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
 				movementDir = util.DirectionToVector(Direction.Left);
 		}
 		else if(KeyUp())
 		{
-			if(Input.GetKey(KeyCode.W))
+			if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
 				movementDir = util.DirectionToVector(Direction.Up);
-			else if(Input.GetKey(KeyCode.S))
+			else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
 				movementDir = util.DirectionToVector(Direction.Down);
-			else if(Input.GetKey(KeyCode.D))
+			else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
 				movementDir = util.DirectionToVector(Direction.Right);
-			else if(Input.GetKey(KeyCode.A))
+			else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
 				movementDir = util.DirectionToVector(Direction.Left);
 			else
 				movementDir = util.DirectionToVector(Direction.None);
@@ -109,7 +109,7 @@ public class Player : CollisionEntity {
 	
 	private bool KeyUp()
 	{
-		if(Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A))
+		if(Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
 			return true;
 		return false;
 	}

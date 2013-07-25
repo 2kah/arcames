@@ -33,6 +33,11 @@ public class PauseMenu : MonoBehaviour
  
     private Page currentPage;
     
+//    void Awake()
+//    {
+//        DontDestroyOnLoad(this);
+//    }
+    
     void Start() {
         util = new Util();
         ruleset = GameObject.Find("Ruleset").GetComponent<Ruleset>();
@@ -117,7 +122,6 @@ public class PauseMenu : MonoBehaviour
             {
                 util.CopyFromRules(rules);
                 Application.LoadLevel(0);
-                currentPage = Page.Main;
             }
         }
         
@@ -364,7 +368,6 @@ public class PauseMenu : MonoBehaviour
         {
             util.CopyFromRules(editRules);
             Application.LoadLevel(0);
-            currentPage = Page.Main;
         }
         EndPage();
     }
@@ -434,14 +437,12 @@ public class PauseMenu : MonoBehaviour
             util.ImportRuleset(importXml);
             importXml = "";
             Application.LoadLevel(0);
-            currentPage = Page.Main;
         }
 //        filename = GUILayout.TextField(filename);
 //        if(GUILayout.Button("Load"))
 //        {
 //            util.LoadRuleset(filename);
 //            Application.LoadLevel(0);
-//            currentPage = Page.Main;
 //        }
         EndPage();
     }
@@ -520,16 +521,17 @@ public class PauseMenu : MonoBehaviour
         currentPage = Page.Main;
     }
  
- void UnPauseGame() {
-     Time.timeScale = savedTimeScale;
-     AudioListener.pause = false;
- 
-     currentPage = Page.None;
- 
-     if (IsBeginning() && start != null) {
-         start.SetActive(true);
-     }
- }
+    void UnPauseGame()
+    {
+        Time.timeScale = savedTimeScale;
+        AudioListener.pause = false;
+        
+        currentPage = Page.None;
+        
+        if (IsBeginning() && start != null) {
+            start.SetActive(true);
+        }
+    }
  
  bool IsGamePaused() {
      return (Time.timeScale == 0);
