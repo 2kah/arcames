@@ -20,6 +20,7 @@ public class PauseMenu : MonoBehaviour
     private string importXml = "";
     private Rules editRules;
     private string scoreLimit, numRed, numGreen, numBlue, scorePlayerRed, scorePlayerGreen, scorePlayerBlue, scoreRedRed, scoreRedGreen, scoreRedBlue, scoreGreenGreen, scoreGreenBlue, scoreBlueBlue;
+    private string playerSpeed, redSpeed, greenSpeed, blueSpeed;
     private string[] movementTypes, entityTypes, collisionEffects;
     
     public GUIStyle redBackground, greenBackground, blueBackground;
@@ -126,10 +127,14 @@ public class PauseMenu : MonoBehaviour
     void SetupEdit()
     {
         editRules = util.CopyToRules();
+        playerSpeed = editRules.PlayerSpeed.ToString();
         scoreLimit = editRules.ScoreLimit.ToString();
         numRed = editRules.NumRed.ToString();
         numGreen = editRules.NumGreen.ToString();
         numBlue = editRules.NumBlue.ToString();
+        redSpeed = editRules.RedSpeed.ToString();
+        greenSpeed = editRules.GreenSpeed.ToString();
+        blueSpeed = editRules.BlueSpeed.ToString();
         scorePlayerRed = editRules.ScorePlayerRed.ToString();
         scorePlayerGreen = editRules.ScorePlayerGreen.ToString();
         scorePlayerBlue = editRules.ScorePlayerBlue.ToString();
@@ -152,6 +157,11 @@ public class PauseMenu : MonoBehaviour
         
         BeginEditControls("Description",null);
         editRules.Description = GUILayout.TextArea(editRules.Description);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Player Speed",null);
+        playerSpeed = GUILayout.TextField(playerSpeed);
+        editRules.PlayerSpeed = StringToFloat(playerSpeed);
         GUILayout.EndHorizontal();
         
         BeginEditControls("Score Limit",null);
@@ -186,6 +196,11 @@ public class PauseMenu : MonoBehaviour
                 editRules.RedTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.RedTarget,entityTypes,4,"toggle");
                 GUILayout.EndHorizontal();
             }
+            
+            BeginEditControls("Red Speed", redBackground);
+            redSpeed = GUILayout.TextField(redSpeed);
+            editRules.RedSpeed = StringToFloat(redSpeed);
+            GUILayout.EndHorizontal();
         }
         
         if(editRules.NumGreen > 0)
@@ -200,6 +215,11 @@ public class PauseMenu : MonoBehaviour
                 editRules.GreenTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.GreenTarget,entityTypes,4,"toggle");
                 GUILayout.EndHorizontal();
             }
+            
+            BeginEditControls("Green Speed", greenBackground);
+            greenSpeed = GUILayout.TextField(greenSpeed);
+            editRules.GreenSpeed = StringToFloat(greenSpeed);
+            GUILayout.EndHorizontal();
         }
         
         if(editRules.NumBlue > 0)
@@ -214,6 +234,11 @@ public class PauseMenu : MonoBehaviour
                 editRules.BlueTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.BlueTarget,entityTypes,4,"toggle");
                 GUILayout.EndHorizontal();
             }
+            
+            BeginEditControls("Blue Speed", blueBackground);
+            blueSpeed = GUILayout.TextField(blueSpeed);
+            editRules.BlueSpeed = StringToFloat(blueSpeed);
+            GUILayout.EndHorizontal();
         }
         
         if(editRules.NumRed > 0)
@@ -364,6 +389,11 @@ public class PauseMenu : MonoBehaviour
     private int StringToInt(string str)
     {
         return Convert.ToInt32(str == "" ? "0" : str);
+    }
+    
+    private float StringToFloat(string str)
+    {
+        return float.Parse(str == "" ? "0" : str);
     }
     
     void ShowExport()

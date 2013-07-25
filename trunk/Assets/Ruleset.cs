@@ -18,7 +18,9 @@ namespace AssemblyCSharp
 public class Ruleset : MonoBehaviour {
 
     [System.NonSerialized]
-    public string Name = "ARCames", Description;
+    public string Name, Description;
+    [System.NonSerialized]
+    public float PlayerSpeed, RedSpeed, GreenSpeed, BlueSpeed;
     [System.NonSerialized]
     public int NumRed, NumGreen, NumBlue;
     [System.NonSerialized]
