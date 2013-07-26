@@ -33,6 +33,8 @@ public class Ruleset : MonoBehaviour {
     public CollisionEffect PlayerRed, PlayerGreen, PlayerBlue, RedPlayer, RedRed, RedGreen, RedBlue, GreenPlayer, GreenRed, GreenGreen, GreenBlue, BluePlayer, BlueRed, BlueGreen, BlueBlue;
     [System.NonSerialized]
     public int ScorePlayerRed, ScorePlayerGreen, ScorePlayerBlue, ScoreRedRed, ScoreRedGreen, ScoreRedBlue, ScoreGreenGreen, ScoreGreenBlue, ScoreBlueBlue;
+    [System.NonSerialized]
+    public Map MapData;
     
     private Util util;
     private static bool firstAwake = true;

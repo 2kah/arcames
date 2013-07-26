@@ -122,6 +122,7 @@ namespace AssemblyCSharp
         public string ExportRuleset()
         {
             Rules rules = CopyToRules();
+            //TODO: convert map to list of lists
             StringBuilder builder = new StringBuilder();
             var serializer = new XmlSerializer(typeof(Rules));
             using(TextWriter writer = new StringWriter(builder))
@@ -136,6 +137,7 @@ namespace AssemblyCSharp
             var serializer = new XmlSerializer(typeof(Rules));
             using (TextReader reader = new StringReader(xml))
                 rules = (Rules) serializer.Deserialize(reader);
+            //TODO: convert map from list of lists
             CopyFromRules(rules);
         }
         
