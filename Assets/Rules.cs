@@ -18,6 +18,7 @@ namespace AssemblyCSharp
         
         public Rules ()
         {
+            MapObject = new Equals();
         }
     }
 }

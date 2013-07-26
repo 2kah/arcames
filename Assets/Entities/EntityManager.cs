@@ -13,10 +13,6 @@ public class EntityManager : MonoBehaviour {
 	void Start () {
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         util = new Util();
-	}
-    
-    void Awake()
-    {
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         util = new Util();
         for(int i = 0; i < rules.NumRed; i++)
