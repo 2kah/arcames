@@ -14,11 +14,20 @@ namespace AssemblyCSharp
         public int ScoreLimit;
         public CollisionEffect PlayerRed, PlayerGreen, PlayerBlue, RedPlayer, RedRed, RedGreen, RedBlue, GreenPlayer, GreenRed, GreenGreen, GreenBlue, BluePlayer, BlueRed, BlueGreen, BlueBlue;
         public int ScorePlayerRed, ScorePlayerGreen, ScorePlayerBlue, ScoreRedRed, ScoreRedGreen, ScoreRedBlue, ScoreGreenGreen, ScoreGreenBlue, ScoreBlueBlue;
-        public Map MapObject;
+        public int MapWidth, MapHeight;
+        public bool[] MapData;
+        //public Map MapObject;
+        
+        public bool[] test;
         
         public Rules ()
         {
-            MapObject = new Equals();
+            //MapObject = new Equals();
+            //Equals is default map
+            Equals equals = new Equals();
+            MapWidth = equals.Width;
+            MapHeight = equals.Height;
+            MapData = equals.MapData;
         }
     }
 }

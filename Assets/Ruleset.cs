@@ -34,7 +34,10 @@ public class Ruleset : MonoBehaviour {
     [System.NonSerialized]
     public int ScorePlayerRed, ScorePlayerGreen, ScorePlayerBlue, ScoreRedRed, ScoreRedGreen, ScoreRedBlue, ScoreGreenGreen, ScoreGreenBlue, ScoreBlueBlue;
     [System.NonSerialized]
-    public Map MapObject;
+    public int MapWidth, MapHeight;
+    [System.NonSerialized]
+    public bool[] MapData;
+    //public Map MapObject;
     
     private Util util;
     private static bool firstAwake = true;
