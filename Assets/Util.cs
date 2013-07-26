@@ -23,7 +23,8 @@ namespace AssemblyCSharp
             InbuiltRules = new List<Type>() {
                 typeof(Hyenas),
                 typeof(Rescue),
-                typeof(WhackAMole)};
+                typeof(WhackAMole),
+                typeof(HyenasPro)};
 		}
 		
 		public Direction Opposite(Direction dir)
