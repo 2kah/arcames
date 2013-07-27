@@ -24,7 +24,7 @@ namespace AssemblyCSharp
         {
             //MapObject = new Equals();
             //Equals is default map
-            Equals equals = new Equals();
+            Map equals = new Pac();
             MapWidth = equals.Width;
             MapHeight = equals.Height;
             MapData = equals.MapData;
