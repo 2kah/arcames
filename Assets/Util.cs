@@ -16,6 +16,7 @@ namespace AssemblyCSharp
 	public class Util
 	{
         public List<Type> InbuiltRules;
+        public List<Type> InbuiltMaps;
         
 		public Util ()
 		{
@@ -23,7 +24,13 @@ namespace AssemblyCSharp
                 typeof(Hyenas),
                 typeof(Rescue),
                 typeof(WhackAMole),
-                typeof(HyenasPro)};
+                typeof(HyenasPro)
+            };
+            
+            InbuiltMaps = new List<Type>() {
+                typeof(Equals),
+                typeof(Pac)
+            };
 		}
 		
 		public Direction Opposite(Direction dir)

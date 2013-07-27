@@ -3,6 +3,7 @@ using System.Collections;
 using AssemblyCSharp;
 using System;
 using System.IO;
+using System.Linq;
 
 //http://wiki.unity3d.com/index.php?title=PauseMenu
 public class PauseMenu : MonoBehaviour
@@ -14,14 +15,17 @@ public class PauseMenu : MonoBehaviour
     
     private float savedTimeScale;
     private Ruleset ruleset;
+    private MapManager mapManager;
     private Util util;
     private Rules[] inbuiltRules;
+    private Map[] inbuiltMaps;
     private Vector2 scrollPosition;
     private string importXml = "";
     private Rules editRules;
     private string scoreLimit, numRed, numGreen, numBlue, scorePlayerRed, scorePlayerGreen, scorePlayerBlue, scoreRedRed, scoreRedGreen, scoreRedBlue, scoreGreenGreen, scoreGreenBlue, scoreBlueBlue;
     private string playerSpeed, redSpeed, greenSpeed, blueSpeed;
-    private string[] movementTypes, entityTypes, collisionEffects;
+    private string[] movementTypes, entityTypes, collisionEffects, mapNames;
+    private int chosenMap = 0;
     
     public GUIStyle redBackground, greenBackground, blueBackground;
     
@@ -41,6 +45,7 @@ public class PauseMenu : MonoBehaviour
     void Start() {
         util = new Util();
         ruleset = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+        mapManager = GameObject.Find("MapManager").GetComponent<MapManager>();
         Time.timeScale = 1;
         PauseGame();
         inbuiltRules = new Rules[util.InbuiltRules.Count];
@@ -49,11 +54,20 @@ public class PauseMenu : MonoBehaviour
             Type rulesType = util.InbuiltRules[i];
             inbuiltRules[i] = (Rules)Activator.CreateInstance(rulesType);
         }
+        inbuiltMaps = new Map[util.InbuiltMaps.Count];
+        mapNames = new string[inbuiltMaps.Length];
+        for(int i = 0; i < inbuiltMaps.Length; i++)
+        {
+            Type mapType = util.InbuiltMaps[i];
+            mapNames[i] = mapType.Name;
+            inbuiltMaps[i] = (Map)Activator.CreateInstance(mapType);
+        }
         movementTypes = Enum.GetNames(typeof(MovementType));
         entityTypes = Enum.GetNames(typeof(EntityType));
         collisionEffects = Enum.GetNames(typeof(CollisionEffect));
         scrollPosition = Vector2.zero;
         
+        //TODO: make this part of map load code
         //move camera up to match size of map
         var cameraPos = transform.position;
         cameraPos.y = (float) Math.Max(ruleset.MapWidth / 1.6, ruleset.MapHeight);
@@ -153,6 +167,29 @@ public class PauseMenu : MonoBehaviour
         scoreGreenGreen = editRules.ScoreGreenGreen.ToString();
         scoreGreenBlue = editRules.ScoreGreenBlue.ToString();
         scoreBlueBlue = editRules.ScoreBlueBlue.ToString();
+        chosenMap = CurrentMap(editRules);
+    }
+    
+    private int CurrentMap(Rules currentRules)
+    {
+        for(int i = 0; i < inbuiltMaps.Length; i++)
+        {
+            if(inbuiltMaps[i].MapData.SequenceEqual(currentRules.MapData))
+                return i;
+        }
+        return 0;
+    }
+    
+    private bool MapEquals(bool[] map1, bool[] map2)
+    {
+        if(map1.Length != map2.Length)
+            return false;
+        for(int i = 0; i < map1.Length; i++)
+        {
+            if(map1[i] != map2[i])
+                return false;
+        }
+        return true;
     }
     
     void ShowEdit()
@@ -166,6 +203,18 @@ public class PauseMenu : MonoBehaviour
         
         BeginEditControls("Description",null);
         editRules.Description = GUILayout.TextArea(editRules.Description);
+        GUILayout.EndHorizontal();
+        
+        BeginEditControls("Map", null);
+        var lastChosen = chosenMap;
+        chosenMap = GUILayout.SelectionGrid(chosenMap,mapNames,2,"toggle");
+        if(chosenMap != lastChosen)
+        {
+            //map selection has changed
+            editRules.MapWidth = inbuiltMaps[chosenMap].Width;
+            editRules.MapHeight = inbuiltMaps[chosenMap].Height;
+            editRules.MapData = inbuiltMaps[chosenMap].MapData;
+        }
         GUILayout.EndHorizontal();
         
         BeginEditControls("Player Speed",null);
