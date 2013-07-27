@@ -10,7 +10,6 @@ using AssemblyCSharp;
 
 namespace AssemblyCSharp
 {
-	
 	public enum Direction {None, Up, Right, Down, Left};
     public enum Axis {None, Horizontal, Vertical};
 	
@@ -85,13 +84,15 @@ namespace AssemblyCSharp
             }
         }
         
-        public Vector3 EmptySpawnPosition()
+        public Vector3 EmptySpawnPosition(int mapWidth, int mapHeight)
         {
             for(int i = 0; i < 1000; i++)
             {
+                float halfWidth = ((float) mapWidth / 2) - 1;
+                float halfHeight = ((float) mapHeight / 2) - 1; 
                 //find an empty position that isn't too close to (0,0) which is where the player spawns
-                float x = UnityEngine.Random.value < 0.5 ? UnityEngine.Random.Range(-6f,-1.5f) : UnityEngine.Random.Range(1.5f, 6f);
-                float z = UnityEngine.Random.value < 0.5 ? UnityEngine.Random.Range(-6f,-1.5f) : UnityEngine.Random.Range(1.5f, 6f);
+                float x = UnityEngine.Random.value < 0.5 ? UnityEngine.Random.Range(-halfWidth,-(halfWidth / 4)) : UnityEngine.Random.Range(halfWidth / 4, halfWidth);
+                float z = UnityEngine.Random.value < 0.5 ? UnityEngine.Random.Range(-halfHeight,-(halfHeight / 4)) : UnityEngine.Random.Range(halfHeight / 4, halfHeight);
                 Vector3 target = new Vector3(x, 0.5f, z);
                 if(PositionEmpty(target))
                     return target;
@@ -107,11 +108,13 @@ namespace AssemblyCSharp
             return false;
         }
         
-        public Vector3 EmptyPosition()
+        public Vector3 EmptyPosition(int mapWidth, int mapHeight)
         {
             for(int i = 0; i < 1000; i++)
             {
-                Vector3 target = new Vector3(UnityEngine.Random.Range(-6f,6f),0.5f, UnityEngine.Random.Range(-6f,6f));
+                float halfWidth = ((float) mapWidth / 2) - 1;
+                float halfHeight = ((float) mapHeight / 2) - 1;
+                Vector3 target = new Vector3(UnityEngine.Random.Range(-halfWidth,halfWidth),0.5f, UnityEngine.Random.Range(-halfHeight,halfHeight));
                 if(PositionEmpty(target))
                     return target;
             }

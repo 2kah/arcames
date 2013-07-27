@@ -53,6 +53,11 @@ public class PauseMenu : MonoBehaviour
         entityTypes = Enum.GetNames(typeof(EntityType));
         collisionEffects = Enum.GetNames(typeof(CollisionEffect));
         scrollPosition = Vector2.zero;
+        
+        //move camera up to match size of map
+        var cameraPos = transform.position;
+        cameraPos.y = (float) Math.Max(ruleset.MapWidth / 1.6, ruleset.MapHeight);
+        transform.position = cameraPos;
     }
  
     static bool IsDashboard() {

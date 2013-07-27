@@ -292,7 +292,7 @@ public class EntityBehaviour : CollisionEntity {
 	
 	private void Teleport()
 	{
-        transform.position = util.EmptyPosition();
+        transform.position = util.EmptyPosition(rules.MapWidth, rules.MapHeight);
         UpdateMovementDirection();
 	}
 }

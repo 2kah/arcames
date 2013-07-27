@@ -25,13 +25,13 @@ public class MapManager : MonoBehaviour
         
         //TODO: make positive Y upwards
         //work from top left, positive Y is downwards
-        Vector2 topLeft = new Vector2(-((float)rules.MapWidth-1)/2, -((float)rules.MapHeight-1)/2);
+        Vector2 bottomLeft = new Vector2(-((float)rules.MapWidth-1)/2, -((float)rules.MapHeight-1)/2);
         for(int i = 0; i < rules.MapData.Length; i++)
         {
             if(rules.MapData[i])
             {
                 Vector2 index2D = MapObject.To2DIndex(i, rules.MapWidth);
-                Vector3 wallPos = new Vector3(topLeft.x + index2D.x, 0.5f, topLeft.y + index2D.y);
+                Vector3 wallPos = new Vector3(bottomLeft.x + index2D.x, 0.5f, bottomLeft.y + index2D.y);
                 Instantiate(WallPiece, wallPos, Quaternion.identity);
             }
         }

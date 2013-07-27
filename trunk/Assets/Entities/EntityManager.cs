@@ -17,15 +17,15 @@ public class EntityManager : MonoBehaviour {
         util = new Util();
         for(int i = 0; i < rules.NumRed; i++)
         {
-            Instantiate(redPrefab, util.EmptySpawnPosition(), Quaternion.identity);
+            Instantiate(redPrefab, util.EmptySpawnPosition(rules.MapWidth, rules.MapHeight), Quaternion.identity);
         }
         for(int i = 0; i < rules.NumGreen; i++)
         {
-            Instantiate(greenPrefab, util.EmptySpawnPosition(), Quaternion.identity);
+            Instantiate(greenPrefab, util.EmptySpawnPosition(rules.MapWidth, rules.MapHeight), Quaternion.identity);
         }
         for(int i = 0; i < rules.NumBlue; i++)
         {
-            Instantiate(bluePrefab, util.EmptySpawnPosition(), Quaternion.identity);
+            Instantiate(bluePrefab, util.EmptySpawnPosition(rules.MapWidth, rules.MapHeight), Quaternion.identity);
         }
     }
 	
