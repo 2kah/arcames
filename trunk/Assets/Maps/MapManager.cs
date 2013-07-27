@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using AssemblyCSharp;
 
 public class MapManager : MonoBehaviour
@@ -8,46 +8,47 @@ public class MapManager : MonoBehaviour
  
     private Util util;
     private Ruleset rules;
+    private List<GameObject> mapPieces;
     
     // Use this for initialization
     void Start ()
     {
+        mapPieces = new List<GameObject>();
         util = new Util();
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
-        CreateMap();
+        CreateMap(rules.MapWidth, rules.MapHeight, rules.MapData);
     }
     
-    public void CreateMap()
+    public void ChangeMap(int width, int height, bool[] mapData)
+    {
+        if(mapPieces.Count > 0)
+        {
+            foreach(var piece in mapPieces)
+            {
+                Destroy(piece);
+            }
+            mapPieces.Clear();
+        }
+        CreateMap(width, height, mapData);
+    }
+    
+    private void CreateMap(int width, int height, bool[] mapData)
     {
         Map MapObject = new Map();
-        GroundPiece.localScale = new Vector3(0.1f * rules.MapWidth, 1, 0.1f * rules.MapHeight);
-        Instantiate(GroundPiece, Vector3.zero, Quaternion.identity);
+        GroundPiece.localScale = new Vector3(0.1f * width, 1, 0.1f * height);
+        mapPieces.Add(((Transform)Instantiate(GroundPiece, Vector3.zero, Quaternion.identity)).gameObject);
         
-        //TODO: make positive Y upwards
-        //work from top left, positive Y is downwards
-        Vector2 bottomLeft = new Vector2(-((float)rules.MapWidth-1)/2, -((float)rules.MapHeight-1)/2);
-        for(int i = 0; i < rules.MapData.Length; i++)
+        //work from top left, positive Y is upwards
+        Vector2 bottomLeft = new Vector2(-((float)width-1)/2, -((float)height-1)/2);
+        for(int i = 0; i < mapData.Length; i++)
         {
             if(rules.MapData[i])
             {
-                Vector2 index2D = MapObject.To2DIndex(i, rules.MapWidth);
+                Vector2 index2D = MapObject.To2DIndex(i, width);
                 Vector3 wallPos = new Vector3(bottomLeft.x + index2D.x, 0.5f, bottomLeft.y + index2D.y);
-                Instantiate(WallPiece, wallPos, Quaternion.identity);
+                mapPieces.Add(((Transform)Instantiate(WallPiece, wallPos, Quaternion.identity)).gameObject);
             }
         }
-        
-//        for(int x = 0; x < MapObject.Width; x++)
-//        {
-//            for(int y = 0; y < MapObject.Height; y++)
-//            {
-//                //todo: handle that this is now 1D
-//                if(MapObject.MapData[x,y])
-//                {
-//                    Vector3 wallPos = new Vector3(topLeft.x + x, 0.5f, topLeft.y + y);
-//                    Instantiate(WallPiece, wallPos, Quaternion.identity);
-//                }
-//            }
-//        }
     }
     
     // Update is called once per frame
