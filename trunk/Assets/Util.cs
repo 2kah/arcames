@@ -24,7 +24,8 @@ namespace AssemblyCSharp
                 typeof(Hyenas),
                 typeof(Rescue),
                 typeof(WhackAMole),
-                typeof(HyenasPro)
+                typeof(HyenasPro),
+                typeof(Pacu)
             };
             
             InbuiltMaps = new List<Type>() {

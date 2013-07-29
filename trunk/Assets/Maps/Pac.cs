@@ -69,23 +69,6 @@ namespace AssemblyCSharp
                 }
             }
         }
-        
-        private void FillXRange(bool[,] map, int start, int finish, int y)
-        {
-            for(int i = start; i <= finish; i++)
-                map[i,y] = true;
-        }
-        
-        private void Mirror(bool[,] map)
-        {
-            for(int x = 0; x < Width / 2; x++)
-            {
-                for(int y = 0; y < Height; y++)
-                {
-                    map[x + (Width / 2),y] = map[(Width / 2) - (1 + x),y];
-                }
-            }
-        }
     }
 }
 

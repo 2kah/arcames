@@ -255,10 +255,13 @@ public class PauseMenu : MonoBehaviour
                 GUILayout.EndHorizontal();
             }
             
-            BeginEditControls("Red Speed", redBackground);
-            redSpeed = GUILayout.TextField(redSpeed);
-            editRules.RedSpeed = StringToFloat(redSpeed);
-            GUILayout.EndHorizontal();
+            if(editRules.RedMovement != MovementType.Still)
+            {
+                BeginEditControls("Red Speed", redBackground);
+                redSpeed = GUILayout.TextField(redSpeed);
+                editRules.RedSpeed = StringToFloat(redSpeed);
+                GUILayout.EndHorizontal();
+            }
         }
         
         if(editRules.NumGreen > 0)
@@ -274,10 +277,13 @@ public class PauseMenu : MonoBehaviour
                 GUILayout.EndHorizontal();
             }
             
-            BeginEditControls("Green Speed", greenBackground);
-            greenSpeed = GUILayout.TextField(greenSpeed);
-            editRules.GreenSpeed = StringToFloat(greenSpeed);
-            GUILayout.EndHorizontal();
+            if(editRules.GreenMovement != MovementType.Still)
+            {
+                BeginEditControls("Green Speed", greenBackground);
+                greenSpeed = GUILayout.TextField(greenSpeed);
+                editRules.GreenSpeed = StringToFloat(greenSpeed);
+                GUILayout.EndHorizontal();
+            }
         }
         
         if(editRules.NumBlue > 0)
@@ -293,10 +299,13 @@ public class PauseMenu : MonoBehaviour
                 GUILayout.EndHorizontal();
             }
             
-            BeginEditControls("Blue Speed", blueBackground);
-            blueSpeed = GUILayout.TextField(blueSpeed);
-            editRules.BlueSpeed = StringToFloat(blueSpeed);
-            GUILayout.EndHorizontal();
+            if(editRules.BlueMovement != MovementType.Still)
+            {
+                BeginEditControls("Blue Speed", blueBackground);
+                blueSpeed = GUILayout.TextField(blueSpeed);
+                editRules.BlueSpeed = StringToFloat(blueSpeed);
+                GUILayout.EndHorizontal();
+            }
         }
         
         if(editRules.NumRed > 0)
