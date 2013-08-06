@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using AssemblyCSharp;
+using System;
 
 public class MapManager : MonoBehaviour
 {
@@ -49,6 +50,21 @@ public class MapManager : MonoBehaviour
                 mapPieces.Add(((Transform)Instantiate(WallPiece, wallPos, Quaternion.identity)).gameObject);
             }
         }
+        
+        //create lights
+        float lightHeight = (float) Math.Max(width, height) / 3;
+        CreateLight(bottomLeft.x, lightHeight, bottomLeft.y);
+        CreateLight(bottomLeft.x + width, lightHeight, bottomLeft.y + height);
+    }
+    
+    private void CreateLight(float x, float y, float z)
+    {
+        GameObject lightGameObject = new GameObject();
+        lightGameObject.AddComponent<Light>();
+        lightGameObject.light.color = Color.white;
+        lightGameObject.transform.position = new Vector3(x, y, z);
+        lightGameObject.light.range = y * 4;
+        lightGameObject.light.intensity = 4;
     }
     
     // Update is called once per frame
