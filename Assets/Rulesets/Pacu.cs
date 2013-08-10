@@ -8,7 +8,7 @@ namespace AssemblyCSharp
         {
             Name = "Pacu";
             Description = "Collect all blues to win. Reds will chase and kill you, greens teleport you away";
-            PlayerSpeed = 3;
+            PlayerSpeed = 4;
             NumRed = 4;
             NumGreen = 4;
             NumBlue = 20;
@@ -16,6 +16,7 @@ namespace AssemblyCSharp
             GreenMovement = MovementType.Still;
             BlueMovement = MovementType.Still;
             RedTarget = EntityType.Player;
+            RedSpeed = 3.5f;
             ScoreLimit = 20;
             PlayerRed = CollisionEffect.Death;
             GreenPlayer = CollisionEffect.Death;

@@ -33,10 +33,10 @@ namespace AssemblyCSharp
             FillXRange(MapData2D, 3, 4, 6);
             FillXRange(MapData2D, 3, 4, 7);
             FillXRange(MapData2D, 7, 9, 7);
-            FillXRange(MapData2D, 12, 17, 7);
+            FillXRange(MapData2D, 12, 15, 7);
             FillXRange(MapData2D, 3, 4, 8);
             FillXRange(MapData2D, 7, 9, 8);
-            FillXRange(MapData2D, 12, 17, 8);
+            FillXRange(MapData2D, 12, 15, 8);
             FillXRange(MapData2D, 12, 13, 9);
             FillXRange(MapData2D, 12, 13, 10);
             FillXRange(MapData2D, 3, 4, 11);
