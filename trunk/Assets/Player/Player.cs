@@ -5,18 +5,18 @@ using AssemblyCSharp;
 
 public class Player : CollisionEntity {
 	
-	private Vector2 movementDir = new Vector2(0f,0f);
     private CollisionEffect hitRed, hitGreen, hitBlue;
-    private float speed;
     private Ruleset rules;
     private ScoreKeeper scoreKeeper;
     private Util util;
+    private CharacterController controller;
 	
 	// Use this for initialization
 	void Start () {
         util = new Util();
         scoreKeeper = GameObject.Find("ScoreKeeper").GetComponent<ScoreKeeper>();
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
+        controller = GetComponent<CharacterController>();
 	}
     
     void Awake()
@@ -34,33 +34,32 @@ public class Player : CollisionEntity {
 		if(Input.anyKeyDown)
 		{
 			if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-				movementDir = util.DirectionToVector(Direction.Up);
+				moving = Direction.Up;
 			else if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-				movementDir = util.DirectionToVector(Direction.Down);
+				moving = Direction.Down;
 			else if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-				movementDir = util.DirectionToVector(Direction.Right);
+				moving = Direction.Right;
 			else if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-				movementDir = util.DirectionToVector(Direction.Left);
+				moving = Direction.Left;
 		}
 		else if(KeyUp())
 		{
 			if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-				movementDir = util.DirectionToVector(Direction.Up);
+				moving = Direction.Up;
 			else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-				movementDir = util.DirectionToVector(Direction.Down);
+				moving = Direction.Down;
 			else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-				movementDir = util.DirectionToVector(Direction.Right);
+				moving = Direction.Right;
 			else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-				movementDir = util.DirectionToVector(Direction.Left);
+				moving = Direction.Left;
 			else
-				movementDir = util.DirectionToVector(Direction.None);
+				moving = Direction.None;
 		}
 		
-		Vector2 newPos = new Vector2();
-		newPos = (movementDir * speed * Time.deltaTime);
-		Vector3 newPosition = new Vector3(newPos.x, 0f, newPos.y);
-		var controller = GetComponent<CharacterController>();
-		controller.Move(newPosition);
+        Vector2 moveDirection = util.DirectionToVector(moving);
+        moveDirection.Normalize();
+        Vector3 newPos = new Vector3(moveDirection.x, 0, moveDirection.y) * speed * Time.deltaTime;
+		controller.Move(newPos);
 		//transform.Translate(newPosition);
 	}
     

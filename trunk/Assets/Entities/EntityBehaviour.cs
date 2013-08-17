@@ -4,14 +4,12 @@ using AssemblyCSharp;
 
 public class EntityBehaviour : CollisionEntity {
 	
-	private float speed;
     private MovementType movementType;
     private CollisionEffect hitPlayer, hitRed, hitGreen, hitBlue;
     private int scorePlayer, scoreRed, scoreGreen, scoreBlue;
     private EntityType target;
     private GameObject player;
     private bool[] blocked;
-    private Direction moving;
     private Util util;
     private Ruleset rules;
     private float randomLongMaxTime = 3f;
@@ -83,6 +81,8 @@ public class EntityBehaviour : CollisionEntity {
 	// Update is called once per frame
 	void Update () {
         //TODO: work out why util is sometimes null here
+        //would have to work out new movement direction here if other entity has set a movement effect on it3027
+        
         Vector2 moveDirection = util.DirectionToVector(moving);
         moveDirection.Normalize();
         Vector3 newPos = rigidbody.position + (new Vector3(moveDirection.x, 0, moveDirection.y) * speed * Time.deltaTime);
@@ -271,10 +271,10 @@ public class EntityBehaviour : CollisionEntity {
             ScoreKeeper.Score += ((float)scoreBlue / 4);
             break;
         }
-        ResolveCollision(effect);
+        ResolveCollision(effect, otherObject);
 	}
     
-    private void ResolveCollision(CollisionEffect effect)
+    private void ResolveCollision(CollisionEffect effect, CollisionEntity other)
     {
         switch(effect)
         {
@@ -286,8 +286,15 @@ public class EntityBehaviour : CollisionEntity {
         case CollisionEffect.Death:
             Destroy(gameObject);
             return;
-        //TODO: more collision effects
+        case CollisionEffect.Push:
+            Push(other);
+            return;
         }
+    }
+    
+    private void Push(CollisionEntity other)
+    {
+        other.pushList.Add(this);
     }
 	
 	private void Teleport()
