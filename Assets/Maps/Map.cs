@@ -13,18 +13,6 @@ namespace AssemblyCSharp
         {
         }
         
-        public int To1DIndex(int x, int y, int width)
-        {
-            return (width * y) + x;
-        }
-        
-        public Vector2 To2DIndex(int i, int width)
-        {
-            int x = i % width;
-            int y = (i - x) / width;
-            return new Vector2(x, y);
-        }
-        
         public void FillXRange(bool[,] map, int start, int finish, int y)
         {
             for(int i = start; i <= finish; i++)

@@ -33,6 +33,23 @@ namespace AssemblyCSharp
                 typeof(Pac)
             };
 		}
+        
+        public int CollisionEffectsIndex(EntityType first, EntityType second)
+        {
+            return To1DIndex((int)first, (int)second, Enum.GetNames(typeof(CollisionEffect)).Length);
+        }
+        
+        public int To1DIndex(int x, int y, int width)
+        {
+            return (width * y) + x;
+        }
+        
+        public Vector2 To2DIndex(int i, int width)
+        {
+            int x = i % width;
+            int y = (i - x) / width;
+            return new Vector2(x, y);
+        }
 		
 		public Direction Opposite(Direction dir)
 		{

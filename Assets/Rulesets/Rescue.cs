@@ -6,18 +6,20 @@ namespace AssemblyCSharp
     {
         public Rescue ()
         {
+            Util util = new Util();
+            
             Name = "Rescue";
             Description = "Catch a green to win. Reds will kill both you and greens";
-            NumGreen = 2;
-            NumRed = 4;
+            NumEntities[(int)EntityType.Red] = 4;
+            NumEntities[(int)EntityType.Green] = 2;
             GreenMovement = MovementType.Flee;
             RedMovement = MovementType.Chase;
             RedTarget = EntityType.Green;
             GreenTarget = EntityType.Red;
             ScoreLimit = 1;
-            PlayerRed = CollisionEffect.Death;
-            RedGreen = CollisionEffect.Teleport;
-            GreenRed = CollisionEffect.Death;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Player, EntityType.Red)] = CollisionEffect.Death;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Red, EntityType.Green)] = CollisionEffect.Teleport;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Green, EntityType.Red)] = CollisionEffect.Death;
             ScorePlayerGreen = 1;
         }
     }

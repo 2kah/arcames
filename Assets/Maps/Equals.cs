@@ -7,6 +7,8 @@ namespace AssemblyCSharp
     {
         public Equals ()
         {
+            Util util = new Util();
+            
             Width = 15;
             Height = Width;
             bool[,] MapData2D = new bool[Width,Height];
@@ -33,7 +35,7 @@ namespace AssemblyCSharp
             {
                 for(int j = 0 ; j < Height; j++)
                 {
-                    MapData[To1DIndex(i,j,Width)] = MapData2D[i,j];
+                    MapData[util.To1DIndex(i,j,Width)] = MapData2D[i,j];
                 }
             }
         }

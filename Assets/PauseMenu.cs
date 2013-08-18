@@ -27,7 +27,8 @@ public class PauseMenu : MonoBehaviour
     private string[] movementTypes, entityTypes, collisionEffects, mapNames;
     private int chosenMap = 0;
     
-    public GUIStyle redBackground, greenBackground, blueBackground;
+    public GUIStyle[] style;
+    //public GUIStyle style[(int)EntityType.Red], style[(int)EntityType.Green], style[(int)EntityType.Blue];
     
     public GameObject start;
  
@@ -152,9 +153,9 @@ public class PauseMenu : MonoBehaviour
         editRules = util.CopyToRules();
         playerSpeed = editRules.PlayerSpeed.ToString();
         scoreLimit = editRules.ScoreLimit.ToString();
-        numRed = editRules.NumRed.ToString();
-        numGreen = editRules.NumGreen.ToString();
-        numBlue = editRules.NumBlue.ToString();
+        numRed = editRules.NumEntities[(int)EntityType.Red].ToString();
+        numGreen = editRules.NumEntities[(int)EntityType.Green].ToString();
+        numBlue = editRules.NumEntities[(int)EntityType.Blue].ToString();
         redSpeed = editRules.RedSpeed.ToString();
         greenSpeed = editRules.GreenSpeed.ToString();
         blueSpeed = editRules.BlueSpeed.ToString();
@@ -227,162 +228,186 @@ public class PauseMenu : MonoBehaviour
         editRules.ScoreLimit = StringToInt(scoreLimit);
         GUILayout.EndHorizontal();
         
-        BeginEditControls("Number of Reds", redBackground);
+        BeginEditControls("Number of Reds", style[(int)EntityType.Red]);
         numRed = GUILayout.TextField(numRed);
-        editRules.NumRed = StringToInt(numRed);
+        editRules.NumEntities[(int)EntityType.Red] = StringToInt(numRed);
         GUILayout.EndHorizontal();
         
-        BeginEditControls("Number of Greens", greenBackground);
+        BeginEditControls("Number of Greens", style[(int)EntityType.Green]);
         numGreen = GUILayout.TextField(numGreen);
-        editRules.NumGreen = StringToInt(numGreen);
+        editRules.NumEntities[(int)EntityType.Green] = StringToInt(numGreen);
         GUILayout.EndHorizontal();
         
-        BeginEditControls("Number of Blues", blueBackground);
+        BeginEditControls("Number of Blues", style[(int)EntityType.Blue]);
         numBlue = GUILayout.TextField(numBlue);
-        editRules.NumBlue = StringToInt(numBlue);
+        editRules.NumEntities[(int)EntityType.Blue] = StringToInt(numBlue);
         GUILayout.EndHorizontal();
         
-        if(editRules.NumRed > 0)
+        if(editRules.NumEntities[(int)EntityType.Red] > 0)
         {
-            BeginEditControls("Red Movement", redBackground);
+            BeginEditControls("Red Movement", style[(int)EntityType.Red]);
             editRules.RedMovement = (MovementType) GUILayout.SelectionGrid((int)editRules.RedMovement,movementTypes,3,"toggle");
             GUILayout.EndHorizontal();
             
             if(editRules.RedMovement == MovementType.Chase || editRules.RedMovement == MovementType.Flee)
             {
-                BeginEditControls("Red Target", redBackground);
+                BeginEditControls("Red Target", style[(int)EntityType.Red]);
                 editRules.RedTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.RedTarget,entityTypes,4,"toggle");
                 GUILayout.EndHorizontal();
             }
             
             if(editRules.RedMovement != MovementType.Still)
             {
-                BeginEditControls("Red Speed", redBackground);
+                BeginEditControls("Red Speed", style[(int)EntityType.Red]);
                 redSpeed = GUILayout.TextField(redSpeed);
                 editRules.RedSpeed = StringToFloat(redSpeed);
                 GUILayout.EndHorizontal();
             }
         }
         
-        if(editRules.NumGreen > 0)
+        if(editRules.NumEntities[(int)EntityType.Green] > 0)
         {
-            BeginEditControls("Green Movement", greenBackground);
+            BeginEditControls("Green Movement", style[(int)EntityType.Green]);
             editRules.GreenMovement = (MovementType) GUILayout.SelectionGrid((int)editRules.GreenMovement,movementTypes,3,"toggle");
             GUILayout.EndHorizontal();
             
             if(editRules.GreenMovement == MovementType.Chase || editRules.GreenMovement == MovementType.Flee)
             {
-                BeginEditControls("Green Target", greenBackground);
+                BeginEditControls("Green Target", style[(int)EntityType.Green]);
                 editRules.GreenTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.GreenTarget,entityTypes,4,"toggle");
                 GUILayout.EndHorizontal();
             }
             
             if(editRules.GreenMovement != MovementType.Still)
             {
-                BeginEditControls("Green Speed", greenBackground);
+                BeginEditControls("Green Speed", style[(int)EntityType.Green]);
                 greenSpeed = GUILayout.TextField(greenSpeed);
                 editRules.GreenSpeed = StringToFloat(greenSpeed);
                 GUILayout.EndHorizontal();
             }
         }
         
-        if(editRules.NumBlue > 0)
+        if(editRules.NumEntities[(int)EntityType.Blue] > 0)
         {
-            BeginEditControls("Blue Movement", blueBackground);
+            BeginEditControls("Blue Movement", style[(int)EntityType.Blue]);
             editRules.BlueMovement = (MovementType) GUILayout.SelectionGrid((int)editRules.BlueMovement,movementTypes,3,"toggle");
             GUILayout.EndHorizontal();
             
             if(editRules.BlueMovement == MovementType.Chase || editRules.BlueMovement == MovementType.Flee)
             {
-                BeginEditControls("Blue Target", blueBackground);
+                BeginEditControls("Blue Target", style[(int)EntityType.Blue]);
                 editRules.BlueTarget = (EntityType) GUILayout.SelectionGrid((int)editRules.BlueTarget,entityTypes,4,"toggle");
                 GUILayout.EndHorizontal();
             }
             
             if(editRules.BlueMovement != MovementType.Still)
             {
-                BeginEditControls("Blue Speed", blueBackground);
+                BeginEditControls("Blue Speed", style[(int)EntityType.Blue]);
                 blueSpeed = GUILayout.TextField(blueSpeed);
                 editRules.BlueSpeed = StringToFloat(blueSpeed);
                 GUILayout.EndHorizontal();
             }
         }
         
-        if(editRules.NumRed > 0)
+        string[] entityNames = Enum.GetNames(typeof(EntityType));
+        for(int i = 0; i < entityNames.Length - 1; i++)
         {
-            BeginEditControls("Player When Hit Red", null);
-            editRules.PlayerRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerRed,collisionEffects,3,"toggle");
+            if(editRules.NumEntities[i] > 0)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    int first = j == 0 ? 3 : i;
+                    int second = j == 1 ? 3 : i;
+                    BeginEditControls(entityNames[first] + " When Hit " + entityNames[second], style[i]);
+                    int collisionIndex = util.CollisionEffectsIndex((EntityType)first, (EntityType)second);
+                    editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
+                    GUILayout.EndHorizontal();
+                }
+            }
+        }
+        
+//        if(editRules.NumRed > 0)
+//        {
+//            BeginEditControls("Player When Hit Red", null);
+//            int playerRedIndex = util.CollisionEffectsIndex(EntityType.Player, EntityType.Red);
+//            editRules.CollisionEffects[playerRedIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[playerRedIndex],collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//            
+//            BeginEditControls("Red When Hit Player", style[(int)EntityType.Red]);
+//            editRules.RedPlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedPlayer,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//            
+//            BeginEditControls("Red When Hit Red", style[(int)EntityType.Red]);
+//            editRules.RedRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedRed,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//        }
+//        
+//        if(editRules.NumGreen > 0)
+//        {
+//            BeginEditControls("Player When Hit Green",null);
+//            editRules.PlayerGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerGreen,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//            
+//            BeginEditControls("Green When Hit Player", style[(int)EntityType.Green]);
+//            editRules.GreenPlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenPlayer,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//            
+//            BeginEditControls("Green When Hit Green", style[(int)EntityType.Green]);
+//            editRules.GreenGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenGreen,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//        }
+//        
+//        if(editRules.NumBlue > 0)
+//        {
+//            BeginEditControls("Player When Hit Blue",null);
+//            editRules.PlayerBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerBlue,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//            
+//            BeginEditControls("Blue When Hit Player", style[(int)EntityType.Blue]);
+//            editRules.BluePlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BluePlayer,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//            
+//            BeginEditControls("Blue When Hit Blue", style[(int)EntityType.Blue]);
+//            editRules.BlueBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueBlue,collisionEffects,3,"toggle");
+//            GUILayout.EndHorizontal();
+//        }
+        
+        if(editRules.NumEntities[(int)EntityType.Red] > 0 && editRules.NumEntities[(int)EntityType.Green] > 0)
+        {
+            BeginEditControls("Red When Hit Green", style[(int)EntityType.Red]);
+            int collisionIndex = util.CollisionEffectsIndex(EntityType.Red, EntityType.Green);
+            editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
             GUILayout.EndHorizontal();
             
-            BeginEditControls("Red When Hit Player", redBackground);
-            editRules.RedPlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedPlayer,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-            
-            BeginEditControls("Red When Hit Red", redBackground);
-            editRules.RedRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedRed,collisionEffects,3,"toggle");
+            BeginEditControls("Green When Hit Red", style[(int)EntityType.Green]);
+            collisionIndex = util.CollisionEffectsIndex(EntityType.Green, EntityType.Red);
+            editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
             GUILayout.EndHorizontal();
         }
         
-        if(editRules.NumGreen > 0)
+        if(editRules.NumEntities[(int)EntityType.Red] > 0 && editRules.NumEntities[(int)EntityType.Blue] > 0)
         {
-            BeginEditControls("Player When Hit Green",null);
-            editRules.PlayerGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerGreen,collisionEffects,3,"toggle");
+            BeginEditControls("Red When Hit Blue", style[(int)EntityType.Red]);
+            int collisionIndex = util.CollisionEffectsIndex(EntityType.Red, EntityType.Blue);
+            editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
             GUILayout.EndHorizontal();
             
-            BeginEditControls("Green When Hit Player", greenBackground);
-            editRules.GreenPlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenPlayer,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-            
-            BeginEditControls("Green When Hit Green", greenBackground);
-            editRules.GreenGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenGreen,collisionEffects,3,"toggle");
+            BeginEditControls("Blue When Hit Red", style[(int)EntityType.Blue]);
+            collisionIndex = util.CollisionEffectsIndex(EntityType.Blue, EntityType.Red);
+            editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
             GUILayout.EndHorizontal();
         }
         
-        if(editRules.NumBlue > 0)
+        if(editRules.NumEntities[(int)EntityType.Green] > 0 && editRules.NumEntities[(int)EntityType.Blue] > 0)
         {
-            BeginEditControls("Player When Hit Blue",null);
-            editRules.PlayerBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.PlayerBlue,collisionEffects,3,"toggle");
+            BeginEditControls("Green When Hit Blue", style[(int)EntityType.Green]);
+            int collisionIndex = util.CollisionEffectsIndex(EntityType.Green, EntityType.Blue);
+            editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
             GUILayout.EndHorizontal();
             
-            BeginEditControls("Blue When Hit Player", blueBackground);
-            editRules.BluePlayer = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BluePlayer,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-            
-            BeginEditControls("Blue When Hit Blue", blueBackground);
-            editRules.BlueBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueBlue,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-        }
-        
-        if(editRules.NumRed > 0 && editRules.NumGreen > 0)
-        {
-            BeginEditControls("Red When Hit Green", redBackground);
-            editRules.RedGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedGreen,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-            
-            BeginEditControls("Green When Hit Red", greenBackground);
-            editRules.GreenRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenRed,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-        }
-        
-        if(editRules.NumRed > 0 && editRules.NumBlue > 0)
-        {
-            BeginEditControls("Red When Hit Blue", redBackground);
-            editRules.RedBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.RedBlue,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-            
-            BeginEditControls("Blue When Hit Red", blueBackground);
-            editRules.BlueRed = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueRed,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-        }
-        
-        if(editRules.NumGreen > 0 && editRules.NumBlue > 0)
-        {
-            BeginEditControls("Green When Hit Blue", greenBackground);
-            editRules.GreenBlue = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.GreenBlue,collisionEffects,3,"toggle");
-            GUILayout.EndHorizontal();
-            
-            BeginEditControls("Blue When Hit Green", blueBackground);
-            editRules.BlueGreen = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.BlueGreen,collisionEffects,3,"toggle");
+            BeginEditControls("Blue When Hit Green", style[(int)EntityType.Blue]);
+            collisionIndex = util.CollisionEffectsIndex(EntityType.Blue, EntityType.Green);
+            editRules.CollisionEffects[collisionIndex] = (CollisionEffect) GUILayout.SelectionGrid((int)editRules.CollisionEffects[collisionIndex],collisionEffects,3,"toggle");
             GUILayout.EndHorizontal();
         }
         
