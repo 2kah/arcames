@@ -6,22 +6,24 @@ namespace AssemblyCSharp
     {
         public Pacu ()
         {
+            Util util = new Util();
+            
             Name = "Pacu";
             Description = "Collect all blues to win. Reds will chase and kill you, greens teleport you away";
             PlayerSpeed = 4;
-            NumRed = 4;
-            NumGreen = 4;
-            NumBlue = 20;
+            NumEntities[(int)EntityType.Red] = 4;
+            NumEntities[(int)EntityType.Green] = 4;
+            NumEntities[(int)EntityType.Blue] = 20;
             RedMovement = MovementType.Chase;
             GreenMovement = MovementType.Still;
             BlueMovement = MovementType.Still;
             RedTarget = EntityType.Player;
             RedSpeed = 3.5f;
             ScoreLimit = 20;
-            PlayerRed = CollisionEffect.Death;
-            GreenPlayer = CollisionEffect.Death;
-            PlayerGreen = CollisionEffect.Teleport;
-            BluePlayer = CollisionEffect.Death;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Player, EntityType.Red)] = CollisionEffect.Death;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Green, EntityType.Player)] = CollisionEffect.Death;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Player, EntityType.Green)] = CollisionEffect.Teleport;
+            CollisionEffects[util.CollisionEffectsIndex(EntityType.Blue, EntityType.Player)] = CollisionEffect.Death;
             ScorePlayerBlue = 1;
             Map pac = new Pac();
             MapWidth = pac.Width;

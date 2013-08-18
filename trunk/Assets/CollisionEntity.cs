@@ -8,6 +8,7 @@ public class CollisionEntity : MonoBehaviour
 	public EntityType entityType;
     
     public float speed;
+    public float currentMoveSpeed;
     public Direction moving;
     
     public List<CollisionEntity> pushList;

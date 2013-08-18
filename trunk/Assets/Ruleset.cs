@@ -22,7 +22,8 @@ public class Ruleset : MonoBehaviour {
     [System.NonSerialized]
     public float PlayerSpeed, RedSpeed, GreenSpeed, BlueSpeed;
     [System.NonSerialized]
-    public int NumRed, NumGreen, NumBlue;
+    public int[] NumEntities;
+    //public int NumRed, NumGreen, NumBlue;
     [System.NonSerialized]
     public MovementType RedMovement, GreenMovement, BlueMovement;
     [System.NonSerialized]
@@ -30,7 +31,8 @@ public class Ruleset : MonoBehaviour {
     [System.NonSerialized]
     public int ScoreLimit = 1;
     [System.NonSerialized]
-    public CollisionEffect PlayerRed, PlayerGreen, PlayerBlue, RedPlayer, RedRed, RedGreen, RedBlue, GreenPlayer, GreenRed, GreenGreen, GreenBlue, BluePlayer, BlueRed, BlueGreen, BlueBlue;
+    public CollisionEffect[] CollisionEffects;
+    //public CollisionEffect PlayerRed, PlayerGreen, PlayerBlue, RedPlayer, RedRed, RedGreen, RedBlue, GreenPlayer, GreenRed, GreenGreen, GreenBlue, BluePlayer, BlueRed, BlueGreen, BlueBlue;
     [System.NonSerialized]
     public int ScorePlayerRed, ScorePlayerGreen, ScorePlayerBlue, ScoreRedRed, ScoreRedGreen, ScoreRedBlue, ScoreGreenGreen, ScoreGreenBlue, ScoreBlueBlue;
     [System.NonSerialized]

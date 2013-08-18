@@ -15,15 +15,15 @@ public class EntityManager : MonoBehaviour {
         util = new Util();
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         util = new Util();
-        for(int i = 0; i < rules.NumRed; i++)
+        for(int i = 0; i < rules.NumEntities[(int)EntityType.Red]; i++)
         {
             Instantiate(redPrefab, util.EmptySpawnPosition(rules.MapWidth, rules.MapHeight), Quaternion.identity);
         }
-        for(int i = 0; i < rules.NumGreen; i++)
+        for(int i = 0; i < rules.NumEntities[(int)EntityType.Green]; i++)
         {
             Instantiate(greenPrefab, util.EmptySpawnPosition(rules.MapWidth, rules.MapHeight), Quaternion.identity);
         }
-        for(int i = 0; i < rules.NumBlue; i++)
+        for(int i = 0; i < rules.NumEntities[(int)EntityType.Blue]; i++)
         {
             Instantiate(bluePrefab, util.EmptySpawnPosition(rules.MapWidth, rules.MapHeight), Quaternion.identity);
         }

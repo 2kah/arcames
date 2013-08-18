@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using AssemblyCSharp;
+using System;
 
 public class EntityBehaviour : CollisionEntity {
 	
     private MovementType movementType;
+    private CollisionEffect[] collisionEffects;
     private CollisionEffect hitPlayer, hitRed, hitGreen, hitBlue;
     private int scorePlayer, scoreRed, scoreGreen, scoreBlue;
     private EntityType target;
@@ -27,21 +29,19 @@ public class EntityBehaviour : CollisionEntity {
     
     void Awake()
     {
+        util = new Util();
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
         GetRules ();
     }
     
     private void GetRules()
     {
-        //TODO: better way of doing this
+        collisionEffects = new CollisionEffect[Enum.GetNames(typeof(CollisionEffect)).Length];
+        //TODO: better way of doing this - just use this.entitytype
         if(entityType == EntityType.Red)
         {
             speed = rules.RedSpeed;
             movementType = rules.RedMovement;
-            hitPlayer = rules.RedPlayer;
-            hitRed = rules.RedRed;
-            hitGreen = rules.RedGreen;
-            hitBlue = rules.RedBlue;
             target = rules.RedTarget;
             scorePlayer = rules.ScorePlayerRed;
             scoreRed = rules.ScoreRedRed;
@@ -52,10 +52,6 @@ public class EntityBehaviour : CollisionEntity {
         {
             speed = rules.GreenSpeed;
             movementType = rules.GreenMovement;
-            hitPlayer = rules.GreenPlayer;
-            hitRed = rules.GreenRed;
-            hitGreen = rules.GreenGreen;
-            hitBlue = rules.GreenBlue;
             target = rules.GreenTarget;
             scorePlayer = rules.ScorePlayerGreen;
             scoreRed = rules.ScoreRedGreen;
@@ -66,31 +62,48 @@ public class EntityBehaviour : CollisionEntity {
         {
             speed = rules.BlueSpeed;
             movementType = rules.BlueMovement;
-            hitPlayer = rules.BluePlayer;
-            hitRed = rules.BlueRed;
-            hitGreen = rules.BlueGreen;
-            hitBlue = rules.BlueBlue;
             target = rules.BlueTarget;
             scorePlayer = rules.ScorePlayerBlue;
             scoreRed = rules.ScoreRedBlue;
             scoreGreen = rules.ScoreGreenBlue;
             scoreBlue = rules.ScoreBlueBlue;
         }
+        hitPlayer = rules.CollisionEffects[util.CollisionEffectsIndex(this.entityType, EntityType.Player)];
+        hitRed = rules.CollisionEffects[util.CollisionEffectsIndex(this.entityType, EntityType.Red)];
+        hitGreen = rules.CollisionEffects[util.CollisionEffectsIndex(this.entityType, EntityType.Green)];
+        hitBlue = rules.CollisionEffects[util.CollisionEffectsIndex(this.entityType, EntityType.Blue)];
+        this.currentMoveSpeed = this.speed;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //TODO: work out why util is sometimes null here
-        //would have to work out new movement direction here if other entity has set a movement effect on it3027
+        if(this.pushList.Count > 0)
+            UpdatePushDirection();
         
+        //TODO: work out why util is sometimes null here
         Vector2 moveDirection = util.DirectionToVector(moving);
         moveDirection.Normalize();
-        Vector3 newPos = rigidbody.position + (new Vector3(moveDirection.x, 0, moveDirection.y) * speed * Time.deltaTime);
+        Vector3 newPos = rigidbody.position + (new Vector3(moveDirection.x, 0, moveDirection.y) * this.currentMoveSpeed * Time.deltaTime);
         rigidbody.MovePosition(newPos);
 	}
     
+    private void UpdatePushDirection()
+    {
+        //work out if the other entity is pushed by us
+        CollisionEffect otherEffect = rules.CollisionEffects[util.CollisionEffectsIndex(this.pushList[0].entityType, this.entityType)];
+        if(this.pushList.Count == 1)
+        {
+            CollisionEntity pusher = this.pushList[0];
+            this.moving = pusher.moving;
+            this.currentMoveSpeed = pusher.currentMoveSpeed;
+        }
+    }
+    
     private void UpdateMovementDirection()
     {
+        //if being pushed then override all other movement
+        if(this.pushList.Count > 0)
+            return;
         DetectBlockages();
         moving = GetMoveDirection();
     }
@@ -106,7 +119,7 @@ public class EntityBehaviour : CollisionEntity {
         case MovementType.RandomLong:
             if(Time.timeSinceLevelLoad >= randomLongEndTime)
             {
-                randomLongEndTime = Time.timeSinceLevelLoad + Random.Range(randomLongMinTime, randomLongMaxTime);
+                randomLongEndTime = Time.timeSinceLevelLoad + UnityEngine.Random.Range(randomLongMinTime, randomLongMaxTime);
                 return RandomDirection();
             }
             else
@@ -126,7 +139,7 @@ public class EntityBehaviour : CollisionEntity {
     
     private Direction RandomDirection()
     {
-        return (Direction) Random.Range(1,5);
+        return (Direction) UnityEngine.Random.Range(1,5);
     }
     
     private Direction CircularMove(bool clockwise)

@@ -21,10 +21,11 @@ public class Player : CollisionEntity {
     
     void Awake()
     {
+        util = new Util();
         rules = GameObject.Find("Ruleset").GetComponent<Ruleset>();
-        hitRed = rules.PlayerRed;
-        hitGreen = rules.PlayerGreen;
-        hitBlue = rules.PlayerBlue;
+        hitRed = rules.CollisionEffects[util.CollisionEffectsIndex(EntityType.Player, EntityType.Red)];
+        hitGreen = rules.CollisionEffects[util.CollisionEffectsIndex(EntityType.Player, EntityType.Green)];
+        hitBlue = rules.CollisionEffects[util.CollisionEffectsIndex(EntityType.Player, EntityType.Blue)];
         speed = rules.PlayerSpeed;
     }
 	

@@ -45,7 +45,7 @@ public class MapManager : MonoBehaviour
         {
             if(rules.MapData[i])
             {
-                Vector2 index2D = MapObject.To2DIndex(i, width);
+                Vector2 index2D = util.To2DIndex(i, width);
                 Vector3 wallPos = new Vector3(bottomLeft.x + index2D.x, 0.5f, bottomLeft.y + index2D.y);
                 mapPieces.Add(((Transform)Instantiate(WallPiece, wallPos, Quaternion.identity)).gameObject);
             }

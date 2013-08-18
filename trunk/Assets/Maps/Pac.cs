@@ -6,6 +6,8 @@ namespace AssemblyCSharp
     {
         public Pac ()
         {
+            Util util = new Util();
+            
             Width = 36;
             Height = 20;
             bool[,] MapData2D = new bool[Width,Height];
@@ -65,7 +67,7 @@ namespace AssemblyCSharp
             {
                 for(int j = 0 ; j < Height; j++)
                 {
-                    MapData[To1DIndex(i,j,Width)] = MapData2D[i,j];
+                    MapData[util.To1DIndex(i,j,Width)] = MapData2D[i,j];
                 }
             }
         }
